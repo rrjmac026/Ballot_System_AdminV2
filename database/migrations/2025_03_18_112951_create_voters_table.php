@@ -8,14 +8,15 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('voters', function (Blueprint $table) {
-            $table->id('voter_id');
+            $table->bigIncrements('voter_id');
             $table->string('student_number')->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('college_id')->constrained('colleges')->onDelete('cascade');
+            $table->unsignedBigInteger('college_id');
+            $table->foreign('college_id')->references('college_id')->on('colleges')->onDelete('cascade');
             $table->string('course')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();

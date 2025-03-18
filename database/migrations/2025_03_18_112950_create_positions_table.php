@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('colleges', function (Blueprint $table) {
-            $table->id('college_id');
+        Schema::create('positions', function (Blueprint $table) {
+            $table->bigIncrements('position_id');
             $table->string('name')->unique();
-            $table->string('acronym', 10)->unique();
+            $table->unsignedBigInteger('organization_id');
+            $table->foreign('organization_id')->references('organization_id')->on('organizations')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('colleges');
+        Schema::dropIfExists('positions');
     }
 };
