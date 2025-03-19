@@ -44,50 +44,6 @@
                 </div>
             </div>
 
-            <!-- System Controls -->
-            <div class="mb-8">
-                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                    System Controls
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="maintenance_mode" id="maintenance_mode"
-                               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               {{ $settings->maintenance_mode ? 'checked' : '' }}>
-                        <label for="maintenance_mode" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                            Enable Maintenance Mode
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="registration_enabled" id="registration_enabled"
-                               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               {{ $settings->registration_enabled ? 'checked' : '' }}>
-                        <label for="registration_enabled" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                            Enable Voter Registration
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="voting_enabled" id="voting_enabled"
-                               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               {{ $settings->voting_enabled ? 'checked' : '' }}>
-                        <label for="voting_enabled" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                            Enable Voting
-                        </label>
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="results_enabled" id="results_enabled"
-                               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               {{ $settings->results_enabled ? 'checked' : '' }}>
-                        <label for="results_enabled" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                            Enable Results Viewing
-                        </label>
-                    </div>
-                </div>
-            </div>
-
             <!-- Submit Button -->
             <div class="flex justify-end space-x-4">
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center">
