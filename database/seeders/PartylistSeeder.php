@@ -12,22 +12,27 @@ class PartylistSeeder extends Seeder
         $partylists = [
             [
                 'name' => 'CASALIGAN',
+                'acronym' => 'CSL',
                 'description' => 'CASALIGAN - Student Political Party'
             ],
             [
                 'name' => 'PANGINDAHAY',
+                'acronym' => 'PNG',
                 'description' => 'PANGINDAHAY - Student Political Party'
             ],
             [
                 'name' => 'SINAGTALA',
+                'acronym' => 'SNG',
                 'description' => 'SINAGTALA - Student Political Party'
             ],
             [
                 'name' => 'INDEPENDENT',
+                'acronym' => 'IND',
                 'description' => 'INDEPENDENT - Independent Candidates'
             ],
             [
                 'name' => 'SILAB',
+                'acronym' => 'SLB',
                 'description' => 'SILAB - Student Political Party'
             ],
         ];
