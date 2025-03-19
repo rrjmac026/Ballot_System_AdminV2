@@ -9,20 +9,6 @@ class Position extends Model
 {
     use HasFactory;
 
-    protected $table = 'positions';
     protected $primaryKey = 'position_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
-
-    protected $fillable = ['name', 'organization_id', 'max_winners'];
-
-    public function organization()
-    {
-        return $this->belongsTo(Organization::class, 'organization_id');
-    }
-
-    public function candidates()
-    {
-        return $this->hasMany(Candidate::class, 'position_id');
-    }
+    protected $fillable = ['name'];
 }

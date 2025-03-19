@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->bigIncrements('organization_id');
             $table->string('name')->unique();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('college_id');
+            $table->unsignedBigInteger('college_id')->nullable();
             $table->foreign('college_id')->references('college_id')->on('colleges')->onDelete('cascade');
             $table->timestamps();
         });

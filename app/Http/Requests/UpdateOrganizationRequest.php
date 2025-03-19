@@ -6,27 +6,25 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrganizationRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:organizations,name,' . $this->organization->organization_id,
-            'description' => 'nullable|string|max:500',
-            'college_id' => 'required|exists:colleges,college_id',
+            'name' => 'required|string|max:255|unique:organizations,name,' . $this->organization->organization_id . ',organization_id',
+            'college_id' => 'nullable|exists:colleges,college_id',
+            'description' => 'required|string',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.required' => 'The organization name is required.',
             'name.unique' => 'This organization name already exists.',
-            'college_id.required' => 'You must select a college.',
-            'college_id.exists' => 'Selected college does not exist.',
+            'college_id.exists' => 'The selected college does not exist.',
         ];
     }
 }

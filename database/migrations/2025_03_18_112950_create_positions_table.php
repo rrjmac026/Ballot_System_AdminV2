@@ -10,8 +10,6 @@ return new class extends Migration {
         Schema::create('positions', function (Blueprint $table) {
             $table->bigIncrements('position_id');
             $table->string('name')->unique();
-            $table->unsignedBigInteger('organization_id');
-            $table->foreign('organization_id')->references('organization_id')->on('organizations')->onDelete('cascade');
             $table->timestamps();
         });
     }

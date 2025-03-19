@@ -13,6 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            CollegeSeeder::class,
+            PositionSeeder::class,
+            PartylistSeeder::class, // Add this line
+        ]);
+
        //Admin Seeder anga ka
         User::updateOrCreate(
             ['email' => 'admin@example.com'],
