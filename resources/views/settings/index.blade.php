@@ -43,7 +43,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- System Controls -->
             <div class="mb-8">
                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
@@ -98,4 +97,5 @@
         </form>
     </div>
 </div>
+
 @endsection
