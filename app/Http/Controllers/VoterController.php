@@ -66,11 +66,17 @@ class VoterController extends Controller
                 'status' => 'Active'
             ]);
 
-            Mail::to($voter->email)->send(new VoterPasskeyMail([
-                'name' => $voter->name,
-                'student_number' => $voter->student_number,
-                'passkey' => $rawPasskey
-            ]));
+            // Send email in a try-catch block to prevent email failures from affecting voter creation
+            try {
+                Mail::to($voter->email)->send(new VoterPasskeyMail([
+                    'name' => $voter->name,
+                    'student_number' => $voter->student_number,
+                    'passkey' => $rawPasskey
+                ]));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send voter passkey email: ' . $e->getMessage());
+                // Continue execution even if email fails
+            }
 
             return redirect()->route('voters.index')
                 ->with('success', 'Voter created successfully.')
@@ -81,9 +87,10 @@ class VoterController extends Controller
                 ]);
 
         } catch (\Exception $e) {
+            \Log::error('Voter creation error: ' . $e->getMessage());
             return redirect()->back()
                 ->withInput()
-                ->withErrors(['error' => 'Failed to create voter. Please try again.']);
+                ->withErrors(['error' => 'Failed to create voter. ' . $e->getMessage()]);
         }
     }
 
