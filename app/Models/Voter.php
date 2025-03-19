@@ -16,21 +16,33 @@ class Voter extends Authenticatable
     protected $keyType = 'int';
 
     protected $fillable = [
-        'student_number', 
-        'first_name', 
-        'last_name', 
-        'middle_name',
-        'email', 
-        'password', 
-        'college_id', 
+        'name',
+        'student_number',
+        'email',
+        'college_id',
         'course',
+        'year_level',
+        'status',
+        'passkey'
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'passkey'];
+
+    // Add mutator to automatically hash passkey
+    public function setPasskeyAttribute($value)
+    {
+        $this->attributes['passkey'] = bcrypt($value);
+    }
+
+    // Add method to verify passkey
+    public function verifyPasskey($passkey)
+    {
+        return password_verify($passkey, $this->passkey);
+    }
 
     public function college()
     {
-        return $this->belongsTo(College::class, 'college_id');
+        return $this->belongsTo(College::class, 'college_id', 'college_id');
     }
 
     public function candidate()

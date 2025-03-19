@@ -1,7 +1,17 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
-    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Edit Voter</h2>
+<div class="container mx-auto px-6 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Edit Voter</h2>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Update voter information</p>
+        </div>
+        <a href="{{ route('voters.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to List
+        </a>
+    </div>
+
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
         <form action="{{ route('voters.update', $voter) }}" method="POST">
             @csrf
@@ -13,8 +23,13 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Student ID</label>
-                    <input type="text" name="student_id" value="{{ $voter->student_id }}" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                    <input type="email" name="email" value="{{ $voter->email }}" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Student Number</label>
+                    <input type="text" name="student_number" value="{{ $voter->student_number }}" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                 </div>
 
                 <div>
@@ -41,6 +56,14 @@
                                 {{ $i }}st Year
                             </option>
                         @endfor
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
+                    <select name="status" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="Active" {{ $voter->status === 'Active' ? 'selected' : '' }}>Active</option>
+                        <option value="Inactive" {{ $voter->status === 'Inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
                 </div>
             </div>

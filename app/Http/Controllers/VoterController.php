@@ -4,13 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Voter;
 use App\Models\College;
+use App\Helpers\PasskeyGenerator;
+use App\Mail\VoterPasskeyMail;
+use App\Mail\VoterPasskeyResetMail;
 use App\Http\Requests\StoreVoterRequest;
 use App\Http\Requests\UpdateVoterRequest;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class VoterController extends Controller
 {
+    private $collegeAcronyms = [
+        'College of Nursing' => 'CON',
+        'College of Technologies' => 'COT',
+        'College of Arts and Sciences' => 'CAS',
+        'College of Public Administration and Governance' => 'CPAG',
+        'College of Business' => 'COB',
+        'College of Education' => 'COE'
+    ];
+
     public function index()
     {
         $voters = Voter::with('college')->get();
@@ -25,19 +38,53 @@ class VoterController extends Controller
 
     public function store(StoreVoterRequest $request)
     {
-        Voter::create([
-            'student_number' => $request->student_number,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'middle_name' => $request->middle_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'college_id' => $request->college_id,
-            'course' => $request->course,
-            'status' => $request->status,
-        ]);
+        try {
+            // First check for existing voter
+            if (Voter::where('student_number', $request->student_number)
+                    ->orWhere('email', $request->email)
+                    ->exists()) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors([
+                        'student_number' => 'A voter with this student number already exists.',
+                        'email' => 'A voter with this email address already exists.'
+                    ]);
+            }
 
-        return redirect()->route('voters.index')->with('success', 'Voter added successfully.');
+            $college = College::find($request->college_id);
+            $acronym = $this->collegeAcronyms[$college->name] ?? 'BUK';
+            $rawPasskey = PasskeyGenerator::generate($acronym);
+
+            $voter = Voter::create([
+                'name' => $request->name,
+                'student_number' => $request->student_number,
+                'college_id' => $request->college_id,
+                'course' => $request->course,
+                'year_level' => $request->year_level,
+                'email' => $request->email,
+                'passkey' => $rawPasskey,
+                'status' => 'Active'
+            ]);
+
+            Mail::to($voter->email)->send(new VoterPasskeyMail([
+                'name' => $voter->name,
+                'student_number' => $voter->student_number,
+                'passkey' => $rawPasskey
+            ]));
+
+            return redirect()->route('voters.index')
+                ->with('success', 'Voter created successfully.')
+                ->with('voterCreated', [
+                    'name' => $voter->name,
+                    'email' => $voter->email,
+                    'passkey' => $rawPasskey
+                ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Failed to create voter. Please try again.']);
+        }
     }
 
     public function show(Voter $voter)
@@ -77,5 +124,31 @@ class VoterController extends Controller
     {
         $voter->delete();
         return redirect()->route('voters.index')->with('success', 'Voter deleted successfully.');
+    }
+
+    public function resetPasskey(Voter $voter)
+    {
+        $college = College::find($voter->college_id);
+        $acronym = $this->collegeAcronyms[$college->name] ?? 'BUK';
+        $rawPasskey = PasskeyGenerator::generate($acronym);
+
+        $voter->update(['passkey' => $rawPasskey]); // Will be automatically hashed
+
+        try {
+            Mail::to($voter->email)->send(new VoterPasskeyResetMail([
+                'name' => $voter->name,
+                'passkey' => $rawPasskey
+            ]));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send passkey reset email: ' . $e->getMessage());
+        }
+
+        return redirect()->route('voters.index')
+            ->with('success', 'Passkey has been reset.')
+            ->with('passkeyReset', [
+                'name' => $voter->name,
+                'email' => $voter->email,
+                'passkey' => $rawPasskey
+            ]);
     }
 }

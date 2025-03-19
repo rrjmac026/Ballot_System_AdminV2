@@ -1,7 +1,27 @@
 @extends('layouts.app')
 @section('content')
+<x-duplicate-voter-alert />
 <div class="container">
     <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Create Voter</h2>
+
+    @if ($errors->any())
+    <div class="mb-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Please fix the following errors:</h3>
+                <ul class="mt-2 text-sm text-red-700 dark:text-red-300">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
         <form action="{{ route('voters.store') }}" method="POST">
             @csrf
@@ -12,8 +32,13 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Student ID</label>
-                    <input type="text" name="student_id" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                    <input type="email" name="email" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Student ID Number</label>
+                    <input type="text" name="student_number" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                 </div>
 
                 <div>

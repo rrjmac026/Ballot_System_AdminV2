@@ -21,7 +21,7 @@
                     <select name="voter_id" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-purple-500 focus:ring-purple-500" required>
                         <option value="">Select Voter</option>
                         @foreach($voters as $voter)
-                            <option value="{{ $voter->voter_id }}">{{ $voter->name }} ({{ $voter->student_id }})</option>
+                            <option value="{{ $voter->voter_id }}">{{ $voter->name }} ({{ $voter->student_number }})</option>
                         @endforeach
                     </select>
                 </div>
@@ -31,7 +31,10 @@
                     <select name="position_id" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-purple-500 focus:ring-purple-500" required>
                         <option value="">Select Position</option>
                         @foreach($positions as $position)
-                            <option value="{{ $position->position_id }}">{{ $position->name }} - {{ $position->organization->name }}</option>
+                            <option value="{{ $position->position_id }}">
+                                {{ $position->name }} 
+                                {{ $position->organization ? '- ' . $position->organization->name : '' }}
+                            </option>
                         @endforeach
                     </select>
                 </div>

@@ -11,4 +11,9 @@ class Position extends Model
 
     protected $primaryKey = 'position_id';
     protected $fillable = ['name'];
+
+    public function candidates()
+    {
+        return $this->hasMany(Candidate::class, 'position_id', 'position_id');
+    }
 }

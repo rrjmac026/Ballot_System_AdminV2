@@ -10,14 +10,18 @@ return new class extends Migration {
         Schema::create('casted_votes', function (Blueprint $table) {
             $table->bigIncrements('casted_vote_id');
             $table->unsignedBigInteger('voter_id');
-            $table->foreign('voter_id')->references('voter_id')->on('voters')->onDelete('cascade');
-            $table->unsignedBigInteger('candidate_id');
-            $table->foreign('candidate_id')->references('candidate_id')->on('candidates')->onDelete('cascade');
             $table->unsignedBigInteger('position_id');
-            $table->foreign('position_id')->references('position_id')->on('positions')->onDelete('cascade');
-            $table->string('election_type'); // Example: "SSC" or "SBO"
+            $table->enum('election_type', ['Regular', 'Special']);
+            $table->string('vote_hash');
+            $table->timestamp('voted_at')->nullable();
             $table->timestamps();
+            $table->foreign('voter_id')->references('voter_id')->on('voters')->onDelete('cascade');
+            $table->foreign('position_id')->references('position_id')->on('positions')->onDelete('cascade');
+
+            // Add unique constraint for voter_id and position_id combination
+            $table->unique(['voter_id', 'position_id'], 'unique_voter_position_vote');
         });
+        
     }
 
     public function down()

@@ -12,6 +12,7 @@ use App\Http\Controllers\CastedVoteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RankingsController;
 
 
 Route::get('/', function () {
@@ -33,6 +34,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/pdf', [ReportController::class, 'generatePDF'])->name('reports.pdf');
+    Route::get('/rankings', [RankingsController::class, 'index'])->name('rankings.index');
+    Route::post('/voters/{voter}/reset-passkey', [VoterController::class, 'resetPasskey'])->name('voters.reset-passkey');
 });
 
 // Profile routes

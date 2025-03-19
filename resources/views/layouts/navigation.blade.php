@@ -36,8 +36,12 @@
 
                     <!-- Dark Mode Toggle -->
                     <button @click="darkMode = !darkMode; 
-                            localStorage.setItem('theme', darkMode ? 'dark' : 'light'); 
-                            document.documentElement.classList.toggle('dark', darkMode);" 
+                            localStorage.theme = darkMode ? 'dark' : 'light';
+                            if (localStorage.theme === 'dark') {
+                                document.documentElement.classList.add('dark')
+                            } else {
+                                document.documentElement.classList.remove('dark')
+                            }"
                         class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <i x-show="darkMode" class="fas fa-sun mr-2"></i>
                         <i x-show="!darkMode" class="fas fa-moon mr-2"></i>
@@ -45,10 +49,12 @@
                     </button>
 
                     <!-- Logout -->
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
-                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        <button type="submit" 
+                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span>Logout</span>
                         </button>
                     </form>
                 </div>
