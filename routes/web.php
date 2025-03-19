@@ -11,6 +11,7 @@ use App\Http\Controllers\VoterController;
 use App\Http\Controllers\CastedVoteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ReportController;
 
 
 Route::get('/', function () {
@@ -30,6 +31,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('casted_votes', CastedVoteController::class);
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/pdf', [ReportController::class, 'generatePDF'])->name('reports.pdf');
 });
 
 // Profile routes

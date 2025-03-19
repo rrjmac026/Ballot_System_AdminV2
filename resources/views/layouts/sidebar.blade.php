@@ -40,6 +40,10 @@
             <i class="fas fa-vote-yea w-5 h-5"></i>
             <span>Voters</span>
         </a>
+        <!-- <a href="{{ route('reports.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <i class="fas fa-chart-bar w-5 h-5"></i>
+            <span>Reports</span>
+        </a> -->
         <a href="{{ route('settings.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
             <i class="fas fa-cog w-5 h-5"></i>
             <span>Settings</span>
