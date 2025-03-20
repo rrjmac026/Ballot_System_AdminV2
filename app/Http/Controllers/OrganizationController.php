@@ -24,11 +24,13 @@ class OrganizationController extends Controller
 
     public function store(StoreOrganizationRequest $request)
     {
-        Organization::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'college_id' => $request->college_id,
-        ]);
+        $data = $request->validated();
+        // If no college_id is provided, set it to null for university-wide organizations
+        if (empty($data['college_id'])) {
+            $data['college_id'] = null;
+        }
+
+        Organization::create($data);
 
         return redirect()->route('organizations.index')->with('success', 'Organization added successfully.');
     }
@@ -46,11 +48,13 @@ class OrganizationController extends Controller
 
     public function update(UpdateOrganizationRequest $request, Organization $organization)
     {
-        $organization->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'college_id' => $request->college_id,
-        ]);
+        $data = $request->validated();
+        // If no college_id is provided, set it to null for university-wide organizations
+        if (empty($data['college_id'])) {
+            $data['college_id'] = null;
+        }
+
+        $organization->update($data);
 
         return redirect()->route('organizations.index')->with('success', 'Organization updated successfully.');
     }

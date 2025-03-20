@@ -50,4 +50,9 @@ class Candidate extends Model
     {
         return $this->belongsTo(College::class, 'college_id');
     }
+
+    public function castedVotes()
+    {
+        return $this->hasMany(CastedVote::class, 'candidate_id', 'candidate_id');
+    }
 }

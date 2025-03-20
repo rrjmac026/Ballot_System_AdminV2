@@ -28,14 +28,28 @@ class CastedVoteController extends Controller
 
     public function store(StoreCastedVoteRequest $request)
     {
-        CastedVote::create([
-            'voter_id' => $request->voter_id,
-            'candidate_id' => $request->candidate_id,
-            'position_id' => $request->position_id,
-            'election_type' => $request->election_type,
-        ]);
+        try {
+            $voteHash = CastedVote::hashVote($request->candidate_id);
+            
+            $castedVote = CastedVote::create([
+                'voter_id' => $request->voter_id,
+                'position_id' => $request->position_id,
+                'candidate_id' => $request->candidate_id, // Add this line
+                'vote_hash' => $voteHash,
+                'voted_at' => now()
+            ]);
 
-        return redirect()->route('casted_votes.index')->with('success', 'Vote casted successfully.');
+            return redirect()->route('casted_votes.index')
+                ->with('success', 'Vote recorded successfully.');
+                
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == 23000) { // Integrity constraint violation
+                return redirect()->back()
+                    ->withErrors(['error' => 'This voter has already cast a vote for this position.'])
+                    ->withInput();
+            }
+            throw $e;
+        }
     }
 
     public function show(CastedVote $castedVote)
