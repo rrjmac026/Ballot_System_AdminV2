@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('voters', function (Blueprint $table) {
             $table->bigIncrements('voter_id');
             $table->string('name');
+            $table->enum('sex', ['M', 'F']);
             $table->string('student_number')->unique();
             $table->string('email')->unique();
             $table->unsignedBigInteger('college_id')->index(); // Indexed for performance

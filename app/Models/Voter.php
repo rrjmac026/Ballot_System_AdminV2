@@ -18,13 +18,13 @@ class Voter extends Authenticatable
 
     protected $fillable = [
         'name',
+        'sex',
         'student_number',
         'email',
         'college_id',
         'course',
         'year_level',
         'status',
-        // 'passkey',
     ];
 
     protected $hidden = ['password', 'passkey']; // Removed 'raw_passkey' for security

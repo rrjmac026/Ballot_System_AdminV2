@@ -15,6 +15,7 @@ class UpdateVoterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'sex' => 'required|in:M,F',
             'email' => [
                 'required',
                 'email',
