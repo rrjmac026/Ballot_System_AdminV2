@@ -61,14 +61,14 @@
                                 <a href="{{ route('voters.edit', $voter) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('voters.reset-passkey', $voter) }}" method="POST" class="inline">
+                                <!-- <form action="{{ route('voters.reset-passkey', $voter) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" 
                                             class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"
                                             onclick="return confirm('Are you sure you want to reset this voter\'s passkey?')">
                                         <i class="fas fa-key"></i>
                                     </button>
-                                </form>
+                                </form> -->
                                 <form action="{{ route('voters.destroy', $voter) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')

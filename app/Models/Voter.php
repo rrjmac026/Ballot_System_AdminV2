@@ -24,7 +24,7 @@ class Voter extends Authenticatable
         'course',
         'year_level',
         'status',
-        'passkey',
+        // 'passkey',
     ];
 
     protected $hidden = ['password', 'passkey']; // Removed 'raw_passkey' for security

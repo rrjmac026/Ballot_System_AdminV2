@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('course');
             $table->integer('year_level');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
-            $table->string('passkey');
+            // $table->string('passkey');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
