@@ -21,6 +21,7 @@ class Voter extends Authenticatable
         'sex',
         'student_number',
         'email',
+        'google_id',
         'college_id',
         'course',
         'year_level',
