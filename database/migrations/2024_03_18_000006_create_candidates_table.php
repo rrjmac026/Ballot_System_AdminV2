@@ -35,6 +35,9 @@ return new class extends Migration
                   ->references('college_id')
                   ->on('colleges')
                   ->onDelete('cascade');
+
+            // Add unique constraint for candidate names
+            $table->unique(['first_name', 'middle_name', 'last_name'], 'unique_candidate_name');
         });
     }
 

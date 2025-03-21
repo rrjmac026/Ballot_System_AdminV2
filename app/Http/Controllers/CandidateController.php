@@ -9,6 +9,9 @@ use App\Models\Position;
 use App\Models\College;
 use App\Http\Requests\StoreCandidateRequest;
 use App\Http\Requests\UpdateCandidateRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,8 +34,23 @@ class CandidateController extends Controller
 
     public function store(StoreCandidateRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
+
+            // Check if candidate already exists in any position
+            $existingCandidate = Candidate::where('first_name', $data['first_name'])
+                ->where('middle_name', $data['middle_name'])
+                ->where('last_name', $data['last_name'])
+                ->first();
+
+            if ($existingCandidate) {
+                DB::rollBack();
+                return back()->withInput()->withErrors([
+                    'error' => 'This candidate is already running for ' . 
+                              $existingCandidate->position->name
+                ]);
+            }
 
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
@@ -46,11 +64,14 @@ class CandidateController extends Controller
             }
 
             $candidate = Candidate::create($data);
+            DB::commit();
 
             return redirect()->route('candidates.index')
                 ->with('success', 'Candidate created successfully');
-        } catch (\Exception $e) {
-            \Log::error('Candidate creation failed: ' . $e->getMessage());
+                
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Candidate creation failed: ' . $e->getMessage());
             return back()->withInput()
                 ->withErrors(['error' => 'Failed to create candidate: ' . $e->getMessage()]);
         }
@@ -72,8 +93,24 @@ class CandidateController extends Controller
 
     public function update(UpdateCandidateRequest $request, Candidate $candidate)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
+
+            // Check if candidate already exists in any other position
+            $existingCandidate = Candidate::where('first_name', $data['first_name'])
+                ->where('middle_name', $data['middle_name'])
+                ->where('last_name', $data['last_name'])
+                ->where('candidate_id', '!=', $candidate->candidate_id)
+                ->first();
+
+            if ($existingCandidate) {
+                DB::rollBack();
+                return back()->withInput()->withErrors([
+                    'error' => 'This candidate is already running for ' . 
+                              $existingCandidate->position->name
+                ]);
+            }
 
             if ($request->hasFile('photo')) {
                 // Delete old photo if exists
@@ -88,11 +125,16 @@ class CandidateController extends Controller
             }
 
             $candidate->update($data);
+            DB::commit();
 
             return redirect()->route('candidates.index')
                 ->with('success', 'Candidate updated successfully');
-        } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['error' => 'Failed to update candidate: ' . $e->getMessage()]);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Candidate update failed: ' . $e->getMessage());
+            return back()->withInput()
+                ->withErrors(['error' => 'Failed to update candidate: ' . $e->getMessage()]);
         }
     }
 

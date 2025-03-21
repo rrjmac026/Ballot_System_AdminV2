@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
             PartylistSeeder::class,
             MaintenanceSettingsSeeder::class,
+            OrganizationSeeder::class,
         ]);
 
        //Admin Seeder anga ka
