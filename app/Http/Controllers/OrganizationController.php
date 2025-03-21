@@ -6,7 +6,6 @@ use App\Models\Organization;
 use App\Models\College;
 use App\Http\Requests\StoreOrganizationRequest;
 use App\Http\Requests\UpdateOrganizationRequest;
-use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
 {
@@ -24,13 +23,17 @@ class OrganizationController extends Controller
 
     public function store(StoreOrganizationRequest $request)
     {
-        Organization::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'college_id' => $request->college_id,
-        ]);
+        $validated = $request->validated();
 
-        return redirect()->route('organizations.index')->with('success', 'Organization added successfully.');
+        // Generate acronym if not provided
+        if (empty($validated['acronym'])) {
+            $validated['acronym'] = substr(preg_replace('/[^A-Z]/', '', strtoupper($validated['name'])), 0, 10);
+        }
+
+        Organization::create($validated);
+
+        return redirect()->route('organizations.index')
+            ->with('success', 'Organization created successfully.');
     }
 
     public function show(Organization $organization)
@@ -46,11 +49,14 @@ class OrganizationController extends Controller
 
     public function update(UpdateOrganizationRequest $request, Organization $organization)
     {
-        $organization->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'college_id' => $request->college_id,
-        ]);
+        $data = $request->validated();
+
+        // If no college_id is provided, set it to null for university-wide organizations
+        if (empty($data['college_id'])) {
+            $data['college_id'] = null;
+        }
+
+        $organization->update($data);
 
         return redirect()->route('organizations.index')->with('success', 'Organization updated successfully.');
     }

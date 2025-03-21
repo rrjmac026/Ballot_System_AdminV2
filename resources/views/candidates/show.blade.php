@@ -1,0 +1,139 @@
+@extends('layouts.app')
+@section('content')
+<div class="container mx-auto px-6 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Candidate Details</h2>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">View candidate information</p>
+        </div>
+        <div class="flex space-x-4">
+            <a href="{{ route('candidates.edit', $candidate) }}" 
+               class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 shadow-md hover:shadow-lg">
+                <i class="fas fa-edit mr-2"></i>
+                Edit
+            </a>
+            <a href="{{ route('candidates.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-200 shadow-md hover:shadow-lg">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6">
+                <!-- Personal Information -->
+                <div class="flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
+                        <i class="fas fa-user text-blue-500 dark:text-blue-400 text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                            {{ $candidate->first_name }} {{ $candidate->middle_name }} {{ $candidate->last_name }}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400">Candidate Information</p>
+                    </div>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- Photo and Basic Info Section -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="mb-4 text-center">
+                            @if($candidate->photo)
+                                <!-- Clickable Photo Container -->
+                                <div x-data="{ showModal: false }" class="relative">
+                                    <!-- Thumbnail -->
+                                    <img src="{{ Storage::disk('public')->url('candidates/' . $candidate->photo) }}" 
+                                         alt="{{ $candidate->first_name }}'s photo"
+                                         class="w-32 h-32 mx-auto object-cover rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition-opacity"
+                                         @click="showModal = true">
+                                    
+                                    <!-- Modal -->
+                                    <div x-show="showModal" 
+                                         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                         @click.self="showModal = false">
+                                        <div class="relative bg-white dark:bg-gray-800 p-2 rounded-lg max-w-3xl max-h-[90vh]">
+                                            <button @click="showModal = false" 
+                                                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                                <i class="fas fa-times text-xl"></i>
+                                            </button>
+                                            <img src="{{ Storage::disk('public')->url('candidates/' . $candidate->photo) }}" 
+                                                 alt="{{ $candidate->first_name }}'s photo"
+                                                 class="max-h-[80vh] w-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="w-32 h-32 mx-auto rounded-lg bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                                    <i class="fas fa-user text-4xl text-gray-400"></i>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- ...rest of the candidate details... -->
+                    </div>
+
+                    <!-- Academic Information -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Academic Details</h4>
+                        <dl class="grid grid-cols-1 gap-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">College</dt>
+                                <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $candidate->college->name }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Course</dt>
+                                <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $candidate->course }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- Candidate Information -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Candidate Details</h4>
+                        <dl class="grid grid-cols-1 gap-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Position</dt>
+                                <dd class="mt-1">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                        {{ $candidate->position->name }}
+                                    </span>
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Partylist</dt>
+                                <dd class="mt-1">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                        {{ $candidate->partylist->name }} ({{ $candidate->partylist->acronym }})
+                                    </span>
+                                </dd>
+                            </div>
+                            @if($candidate->platform)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Platform</dt>
+                                <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $candidate->platform }}</dd>
+                            </div>
+                            @endif
+                        </dl>
+                    </div>
+
+                    <!-- Voting Statistics -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 md:col-span-2">
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Voting Statistics</h4>
+                        <dl class="grid grid-cols-1 gap-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Votes Received</dt>
+                                <dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                    {{ $candidate->castedVotes->count() }}
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

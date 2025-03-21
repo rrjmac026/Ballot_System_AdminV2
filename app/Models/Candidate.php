@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Candidate extends Model
 {
@@ -19,11 +20,13 @@ class Candidate extends Model
         'first_name',
         'last_name',
         'middle_name',
-        'partylist_id',   // Foreign key for partylist
-        'organization_id', // Foreign key for organization
-        'position_id',     // Foreign key for position
-        'college_id',      // Foreign key for college
-        'course',          // Course name (if needed)
+        'partylist_id',   
+        'organization_id', 
+        'position_id',     
+        'college_id', 
+        'course',          
+        'photo',           
+        'platform'
     ];
 
     public function voter()
@@ -49,5 +52,19 @@ class Candidate extends Model
     public function college()
     {
         return $this->belongsTo(College::class, 'college_id');
+    }
+
+    public function castedVotes()
+    {
+        return $this->hasMany(CastedVote::class, 'candidate_id', 'candidate_id');
+    }
+
+    // Add this method for photo URL
+    public function getPhotoUrlAttribute()
+    {
+        if ($this->photo) {
+            return Storage::disk('public')->url('candidates/' . $this->photo);
+        }
+        return asset('images/default-avatar.png');
     }
 }

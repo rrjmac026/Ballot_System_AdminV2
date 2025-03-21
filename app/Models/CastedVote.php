@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class CastedVote extends Model
 {
@@ -14,7 +15,24 @@ class CastedVote extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['voter_id', 'candidate_id', 'position_id', 'election_type'];
+    protected $fillable = [
+        'voter_id',
+        'position_id',
+        'candidate_id',
+        'vote_hash',
+        'voted_at'
+    ];
+
+    protected $dates = ['voted_at'];
+
+    protected $casts = [
+        'voted_at' => 'datetime'
+    ];
+
+    public static function hashVote($candidate_id)
+    {
+        return Hash::make($candidate_id . env('APP_KEY'));
+    }
 
     public function voter()
     {

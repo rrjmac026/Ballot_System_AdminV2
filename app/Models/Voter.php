@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Extend User authentication
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class Voter extends Authenticatable
 {
@@ -16,21 +17,42 @@ class Voter extends Authenticatable
     protected $keyType = 'int';
 
     protected $fillable = [
-        'student_number', 
-        'first_name', 
-        'last_name', 
-        'middle_name',
-        'email', 
-        'password', 
-        'college_id', 
+        'name',
+        'student_number',
+        'email',
+        'college_id',
         'course',
+        'year_level',
+        'status',
+        'passkey',
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'passkey']; // Removed 'raw_passkey' for security
 
+    /**
+     * Mutator: Hash the passkey before storing it
+     */
+    public function setPasskeyAttribute($value)
+    {
+        if (!empty($value)) {
+            $this->attributes['passkey'] = Hash::make($value);
+        }
+    }
+
+    /**
+     * Verify the passkey
+     */
+    public function verifyPasskey($passkey)
+    {
+        return Hash::check($passkey, $this->passkey);
+    }
+
+    /**
+     * Relationships
+     */
     public function college()
     {
-        return $this->belongsTo(College::class, 'college_id');
+        return $this->belongsTo(College::class, 'college_id', 'college_id');
     }
 
     public function candidate()
