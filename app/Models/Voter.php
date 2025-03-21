@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Extend User authentication
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class Voter extends Authenticatable
 {
@@ -23,23 +24,32 @@ class Voter extends Authenticatable
         'course',
         'year_level',
         'status',
-        'passkey'
+        'passkey',
     ];
 
-    protected $hidden = ['password', 'passkey'];
+    protected $hidden = ['password', 'passkey']; // Removed 'raw_passkey' for security
 
-    // Add mutator to automatically hash passkey
+    /**
+     * Mutator: Hash the passkey before storing it
+     */
     public function setPasskeyAttribute($value)
     {
-        $this->attributes['passkey'] = bcrypt($value);
+        if (!empty($value)) {
+            $this->attributes['passkey'] = Hash::make($value);
+        }
     }
 
-    // Add method to verify passkey
+    /**
+     * Verify the passkey
+     */
     public function verifyPasskey($passkey)
     {
-        return password_verify($passkey, $this->passkey);
+        return Hash::check($passkey, $this->passkey);
     }
 
+    /**
+     * Relationships
+     */
     public function college()
     {
         return $this->belongsTo(College::class, 'college_id', 'college_id');

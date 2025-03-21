@@ -10,9 +10,11 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\VoterController;
 use App\Http\Controllers\CastedVoteController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RankingsController;
+use App\Http\Controllers\EmailLogController;
+use App\Http\Controllers\VoteController;
+use App\Http\Controllers\MaintenanceController;
 
 
 Route::get('/', function () {
@@ -30,12 +32,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('candidates', CandidateController::class);
     Route::resource('voters', VoterController::class);
     Route::resource('casted_votes', CastedVoteController::class);
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/pdf', [ReportController::class, 'generatePDF'])->name('reports.pdf');
     Route::get('/rankings', [RankingsController::class, 'index'])->name('rankings.index');
     Route::post('/voters/{voter}/reset-passkey', [VoterController::class, 'resetPasskey'])->name('voters.reset-passkey');
+    Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
+    Route::post('/maintenance/toggle', [MaintenanceController::class, 'toggle'])->name('maintenance.toggle');
+    Route::post('/maintenance/message', [MaintenanceController::class, 'updateMessage'])->name('maintenance.message');
 });
 
 // Profile routes

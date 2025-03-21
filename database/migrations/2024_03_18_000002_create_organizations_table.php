@@ -13,7 +13,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('acronym', 10);
             $table->text('description')->nullable();
+            $table->unsignedBigInteger('college_id')->nullable(); // Add this line
             $table->timestamps();
+
+            // Add foreign key constraint
+            $table->foreign('college_id')
+                  ->references('college_id')
+                  ->on('colleges')
+                  ->onDelete('set null');
         });
     }
 

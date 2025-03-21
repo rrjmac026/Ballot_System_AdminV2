@@ -38,6 +38,43 @@
 
                 <!-- Details Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- Photo and Basic Info Section -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="mb-4 text-center">
+                            @if($candidate->photo)
+                                <!-- Clickable Photo Container -->
+                                <div x-data="{ showModal: false }" class="relative">
+                                    <!-- Thumbnail -->
+                                    <img src="{{ Storage::disk('public')->url('candidates/' . $candidate->photo) }}" 
+                                         alt="{{ $candidate->first_name }}'s photo"
+                                         class="w-32 h-32 mx-auto object-cover rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition-opacity"
+                                         @click="showModal = true">
+                                    
+                                    <!-- Modal -->
+                                    <div x-show="showModal" 
+                                         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                         @click.self="showModal = false">
+                                        <div class="relative bg-white dark:bg-gray-800 p-2 rounded-lg max-w-3xl max-h-[90vh]">
+                                            <button @click="showModal = false" 
+                                                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                                <i class="fas fa-times text-xl"></i>
+                                            </button>
+                                            <img src="{{ Storage::disk('public')->url('candidates/' . $candidate->photo) }}" 
+                                                 alt="{{ $candidate->first_name }}'s photo"
+                                                 class="max-h-[80vh] w-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="w-32 h-32 mx-auto rounded-lg bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                                    <i class="fas fa-user text-4xl text-gray-400"></i>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- ...rest of the candidate details... -->
+                    </div>
+
                     <!-- Academic Information -->
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                         <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Academic Details</h4>
@@ -53,9 +90,9 @@
                         </dl>
                     </div>
 
-                    <!-- Election Information -->
+                    <!-- Candidate Information -->
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Election Details</h4>
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Candidate Details</h4>
                         <dl class="grid grid-cols-1 gap-4">
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Position</dt>
@@ -66,15 +103,30 @@
                                 </dd>
                             </div>
                             <div>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Organization</dt>
-                                <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $candidate->organization->name }}</dd>
-                            </div>
-                            <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Partylist</dt>
                                 <dd class="mt-1">
                                     <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                        {{ $candidate->partylist->name }}
+                                        {{ $candidate->partylist->name }} ({{ $candidate->partylist->acronym }})
                                     </span>
+                                </dd>
+                            </div>
+                            @if($candidate->platform)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Platform</dt>
+                                <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $candidate->platform }}</dd>
+                            </div>
+                            @endif
+                        </dl>
+                    </div>
+
+                    <!-- Voting Statistics -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 md:col-span-2">
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Voting Statistics</h4>
+                        <dl class="grid grid-cols-1 gap-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Votes Received</dt>
+                                <dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                    {{ $candidate->castedVotes->count() }}
                                 </dd>
                             </div>
                         </dl>

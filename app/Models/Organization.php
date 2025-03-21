@@ -14,7 +14,12 @@ class Organization extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['name', 'description', 'college_id'];
+    protected $fillable = [
+        'name',
+        'acronym',
+        'description',
+        'college_id'
+    ];
 
     public function college()
     {

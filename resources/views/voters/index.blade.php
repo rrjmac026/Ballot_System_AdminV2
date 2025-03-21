@@ -2,16 +2,19 @@
 @section('content')
 <x-voter-created-alert />
 <x-passkey-reset-alert />
+<x-passkey-reset-failed-alert />
 <div class="container mx-auto px-6 py-8">
     <div class="flex justify-between items-center mb-6">
         <div>
             <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Voters</h2>
             <p class="text-gray-600 dark:text-gray-400 mt-1">Manage registered voters</p>
         </div>
-        <a href="{{ route('voters.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center">
-            <i class="fas fa-user-plus mr-2"></i>
-            Add New Voter
-        </a>
+        <div class="flex space-x-4">
+            <a href="{{ route('voters.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center">
+                <i class="fas fa-user-plus mr-2"></i>
+                Add New Voter
+            </a>
+        </div>
     </div>
     
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">

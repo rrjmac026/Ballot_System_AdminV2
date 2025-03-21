@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Position;
+use App\Models\Organization;  // Add this line
 use App\Http\Requests\StorePositionRequest;
 use App\Http\Requests\UpdatePositionRequest;
 
@@ -32,7 +33,8 @@ class PositionController extends Controller
 
     public function edit(Position $position)
     {
-        return view('positions.edit', compact('position'));
+        $organizations = Organization::all();
+        return view('positions.edit', compact('position', 'organizations'));
     }
 
     public function update(UpdatePositionRequest $request, Position $position)
