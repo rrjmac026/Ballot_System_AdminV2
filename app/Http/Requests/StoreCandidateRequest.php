@@ -15,13 +15,14 @@ class StoreCandidateRequest extends FormRequest
     {
         return [
             'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
-            'partylist_id' => 'nullable|exists:partylists,partylist_id',
-            'organization_id' => 'required|exists:organizations,organization_id',
+            'last_name' => 'required|string|max:255',
             'position_id' => 'required|exists:positions,position_id',
+            'partylist_id' => 'required|exists:partylists,partylist_id',
             'college_id' => 'required|exists:colleges,college_id',
-            'course' => 'nullable|string|max:255',
+            'course' => 'required|string|max:255',
+            'platform' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Add this line
         ];
     }
 

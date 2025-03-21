@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('student_number')->unique();
             $table->string('email')->unique();
-            $table->unsignedBigInteger('college_id');
+            $table->unsignedBigInteger('college_id')->index(); // Indexed for performance
             $table->string('course');
             $table->integer('year_level');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes(); // ✅ Soft delete for safer data handling
 
             $table->foreign('college_id')
                   ->references('college_id')

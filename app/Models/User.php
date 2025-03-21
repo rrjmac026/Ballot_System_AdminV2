@@ -10,11 +10,15 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_STUDENT = 'student';
+    const ROLE_VOTER = 'voter';
+
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role', // Added role field
+        'role',
     ];
 
     protected $hidden = [
@@ -22,19 +26,19 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    // Check if the user is an admin
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->role === self::ROLE_ADMIN;
     }
 
-    // Check if the user is a student
     public function isStudent()
     {
-        return $this->role === 'student';
+        return $this->role === self::ROLE_STUDENT;
+    }
+
+    public function isVoter()
+    {
+        return $this->role === self::ROLE_VOTER;
     }
 }
+

@@ -10,12 +10,13 @@ use App\Models\College;
 use App\Http\Requests\StoreCandidateRequest;
 use App\Http\Requests\UpdateCandidateRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CandidateController extends Controller
 {
     public function index()
     {
-        $candidates = Candidate::with(['partylist', 'organization', 'position', 'college'])->get();
+        $candidates = Candidate::with(['position', 'college', 'partylist'])->get();
         return view('candidates.index', compact('candidates'));
     }
 
@@ -30,18 +31,29 @@ class CandidateController extends Controller
 
     public function store(StoreCandidateRequest $request)
     {
-        Candidate::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'middle_name' => $request->middle_name,
-            'partylist_id' => $request->partylist_id,
-            'organization_id' => $request->organization_id,
-            'position_id' => $request->position_id,
-            'college_id' => $request->college_id,
-            'course' => $request->course,
-        ]);
+        try {
+            $data = $request->validated();
 
-        return redirect()->route('candidates.index')->with('success', 'Candidate added successfully.');
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $filename = time() . '_' . $photo->getClientOriginalName();
+                
+                // Store directly in public disk with correct path
+                $path = $photo->storeAs('candidates', $filename, 'public');
+                $data['photo'] = $filename;
+
+                \Log::info('Photo stored at: ' . $path); // Debug log
+            }
+
+            $candidate = Candidate::create($data);
+
+            return redirect()->route('candidates.index')
+                ->with('success', 'Candidate created successfully');
+        } catch (\Exception $e) {
+            \Log::error('Candidate creation failed: ' . $e->getMessage());
+            return back()->withInput()
+                ->withErrors(['error' => 'Failed to create candidate: ' . $e->getMessage()]);
+        }
     }
 
     public function show(Candidate $candidate)
@@ -60,23 +72,41 @@ class CandidateController extends Controller
 
     public function update(UpdateCandidateRequest $request, Candidate $candidate)
     {
-        $candidate->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'middle_name' => $request->middle_name,
-            'partylist_id' => $request->partylist_id,
-            'organization_id' => $request->organization_id,
-            'position_id' => $request->position_id,
-            'college_id' => $request->college_id,
-            'course' => $request->course,
-        ]);
+        try {
+            $data = $request->validated();
 
-        return redirect()->route('candidates.index')->with('success', 'Candidate updated successfully.');
+            if ($request->hasFile('photo')) {
+                // Delete old photo if exists
+                if ($candidate->photo) {
+                    Storage::delete('public/candidates/' . $candidate->photo);
+                }
+                
+                $photo = $request->file('photo');
+                $filename = time() . '_' . $photo->getClientOriginalName();
+                $photo->storeAs('public/candidates', $filename);
+                $data['photo'] = $filename;
+            }
+
+            $candidate->update($data);
+
+            return redirect()->route('candidates.index')
+                ->with('success', 'Candidate updated successfully');
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Failed to update candidate: ' . $e->getMessage()]);
+        }
     }
 
     public function destroy(Candidate $candidate)
     {
-        $candidate->delete();
-        return redirect()->route('candidates.index')->with('success', 'Candidate deleted successfully.');
+        try {
+            if ($candidate->photo) {
+                Storage::delete('public/candidates/' . $candidate->photo);
+            }
+            $candidate->delete();
+            return redirect()->route('candidates.index')
+                ->with('success', 'Candidate deleted successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete candidate: ' . $e->getMessage()]);
+        }
     }
 }

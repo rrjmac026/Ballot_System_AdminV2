@@ -15,14 +15,33 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <form action="{{ route('organizations.store') }}" method="POST">
             @csrf
-            <div class="grid grid-cols-1 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organization Name</label>
-                    <input type="text" name="name" 
-                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500" 
-                           placeholder="Enter organization name" required>
+                    <input type="text" name="name" value="{{ old('name') }}" 
+                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" required>
                 </div>
 
+                <!-- Add Acronym field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Acronym</label>
+                    <input type="text" name="acronym" value="{{ old('acronym') }}" 
+                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                           maxlength="10" required
+                           placeholder="e.g., SBO">
+                    <p class="mt-1 text-sm text-gray-500">Maximum 10 characters</p>
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                    <textarea name="description" rows="3" 
+                              class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">{{ old('description') }}</textarea>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 mt-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         College
@@ -36,13 +55,6 @@
                         @endforeach
                     </select>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Leave empty if this is a university-wide organization</p>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
-                    <textarea name="description" rows="4" 
-                              class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500" 
-                              placeholder="Enter organization description" required></textarea>
                 </div>
 
                 <div class="flex justify-end space-x-4 mt-6">

@@ -16,14 +16,31 @@
         <form action="{{ route('organizations.update', $organization) }}" method="POST">
             @csrf
             @method('PUT')
-            <div class="grid grid-cols-1 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organization Name</label>
-                    <input type="text" name="name" value="{{ $organization->name }}"
-                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500" 
-                           required>
+                    <input type="text" name="name" value="{{ old('name', $organization->name) }}" 
+                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" required>
                 </div>
 
+                <!-- Acronym -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Acronym</label>
+                    <input type="text" name="acronym" value="{{ old('acronym', $organization->acronym) }}" maxlength="10"
+                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" required>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Maximum of 10 characters</p>
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                    <textarea name="description" rows="3" 
+                              class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">{{ old('description', $organization->description) }}</textarea>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 mt-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">College</label>
                     <select name="college_id" 
@@ -36,13 +53,6 @@
                             </option>
                         @endforeach
                     </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
-                    <textarea name="description" rows="4" 
-                              class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500" 
-                              required>{{ $organization->description }}</textarea>
                 </div>
 
                 <div class="flex justify-end space-x-4 mt-6">

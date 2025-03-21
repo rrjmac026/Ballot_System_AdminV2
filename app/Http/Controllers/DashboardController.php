@@ -9,6 +9,7 @@ use App\Models\College;
 use App\Models\Organization;
 use App\Models\Partylist;
 use App\Models\CastedVote;
+use App\Models\EmailLog;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -43,6 +44,30 @@ class DashboardController extends Controller
 
         // Voting progress by college
         $data['collegeProgress'] = $this->getCollegeVotingProgress();
+
+        // Add email statistics
+        $data['emailStats'] = [
+            'totalEmails' => EmailLog::count(),
+            'successfulEmails' => EmailLog::where('status', 'sent')->count(),
+            'failedEmails' => EmailLog::where('status', 'failed')->count(),
+            'todayEmails' => EmailLog::whereDate('created_at', today())->count()
+        ];
+
+        // Get presidential rankings
+        $presidentialPosition = Position::where('name', 'like', '%president%')
+            ->orWhere('name', 'like', '%President%')
+            ->first();
+
+        if ($presidentialPosition) {
+            $data['presidentialRankings'] = Candidate::where('position_id', $presidentialPosition->position_id)
+                ->withCount(['castedVotes'])
+                ->orderByDesc('casted_votes_count')
+                ->with(['partylist', 'college'])
+                ->take(3)
+                ->get();
+        } else {
+            $data['presidentialRankings'] = collect();
+        }
 
         return view('dashboard', $data);
     }

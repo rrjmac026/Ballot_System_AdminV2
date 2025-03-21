@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('partylist_id');
             $table->unsignedBigInteger('college_id');
             $table->string('course');
+            $table->string('photo')->nullable();
             $table->text('platform')->nullable();
             $table->string('photo_path')->nullable();
             $table->timestamps();

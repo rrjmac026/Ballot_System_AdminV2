@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CollegeSeeder::class,
             PositionSeeder::class,
-            PartylistSeeder::class, // Add this line
+            PartylistSeeder::class,
+            MaintenanceSettingsSeeder::class,
         ]);
 
        //Admin Seeder anga ka

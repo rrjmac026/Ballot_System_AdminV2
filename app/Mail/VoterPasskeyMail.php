@@ -14,12 +14,21 @@ class VoterPasskeyMail extends Mailable
 
     public function __construct($data)
     {
-        $this->voter = $data;
+        $this->voter = $data['voter'];
     }
 
     public function build()
     {
-        return $this->markdown('emails.voter-passkey')
-                    ->subject('Your Passkey');
+        try {
+            return $this->markdown('emails.voter-passkey')
+                       ->subject('Your BukSU Comelec System Passkey')
+                       ->withSwiftMessage(function ($message) {
+                           $message->getHeaders()
+                                  ->addTextHeader('X-PMTA-Custom', 'BukSU-Comelec');
+                       });
+        } catch (\Exception $e) {
+            \Log::error('Mail build error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

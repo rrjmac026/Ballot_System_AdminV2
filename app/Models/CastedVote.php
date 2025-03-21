@@ -18,7 +18,7 @@ class CastedVote extends Model
     protected $fillable = [
         'voter_id',
         'position_id',
-        'candidate_id', // Add this line
+        'candidate_id',
         'vote_hash',
         'voted_at'
     ];
