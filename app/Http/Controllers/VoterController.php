@@ -82,18 +82,20 @@ class VoterController extends Controller
 
     public function update(UpdateVoterRequest $request, Voter $voter)
     {
-        $data = [
-            'student_number' => $request->student_number,
-            'name' => $request->name,
-            'email' => $request->email,
-            'college_id' => $request->college_id,
-            'course' => $request->course,
-            'status' => $request->status,
-        ];
-
-        $voter->update($data);
-
-        return redirect()->route('voters.index')->with('success', 'Voter updated successfully.');
+        try {
+            $validated = $request->validated();
+            $voter->update($validated);
+            
+            return redirect()
+                ->route('voters.index')
+                ->with('success', 'Voter updated successfully');
+        } catch (\Exception $e) {
+            Log::error('Voter update error: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['error' => 'Failed to update voter. Please try again.']);
+        }
     }
 
     public function destroy(Voter $voter)
