@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             OrganizationSeeder::class,
         ]);
 
+        $this->call(CandidateSeeder::class);
+
        //Admin Seeder anga ka
         User::updateOrCreate(
             ['email' => 'admin@example.com'],

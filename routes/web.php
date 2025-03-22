@@ -35,7 +35,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/pdf', [ReportController::class, 'generatePDF'])->name('reports.pdf');
     Route::get('/rankings', [RankingsController::class, 'index'])->name('rankings.index');
-    Route::post('/voters/{voter}/reset-passkey', [VoterController::class, 'resetPasskey'])->name('voters.reset-passkey');
+    
     Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
     Route::post('/maintenance/toggle', [MaintenanceController::class, 'toggle'])->name('maintenance.toggle');
     Route::post('/maintenance/message', [MaintenanceController::class, 'updateMessage'])->name('maintenance.message');

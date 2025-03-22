@@ -69,6 +69,22 @@ class DashboardController extends Controller
             $data['presidentialRankings'] = collect();
         }
 
+        // Add vice presidential rankings
+        $vicePresidentialPosition = Position::where('name', 'like', '%vice president%')
+            ->orWhere('name', 'like', '%Vice President%')
+            ->first();
+
+        if ($vicePresidentialPosition) {
+            $data['vicePresidentialRankings'] = Candidate::where('position_id', $vicePresidentialPosition->position_id)
+                ->withCount(['castedVotes'])
+                ->orderByDesc('casted_votes_count')
+                ->with(['partylist', 'college'])
+                ->take(3)
+                ->get();
+        } else {
+            $data['vicePresidentialRankings'] = collect();
+        }
+
         return view('dashboard', $data);
     }
 

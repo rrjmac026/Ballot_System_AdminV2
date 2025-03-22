@@ -72,11 +72,11 @@
         </a>
 
         <!-- Email Logs -->
-        <a href="{{ route('email-logs.index') }}" 
+        <!-- <a href="{{ route('email-logs.index') }}" 
            class="flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('email-logs.*') ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
             <i class="fas fa-envelope w-5 h-5"></i>
             <span>Email Logs</span>
-        </a>
+        </a> -->
 
         <!-- Maintenance Section -->
         <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
