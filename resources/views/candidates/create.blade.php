@@ -3,12 +3,12 @@
 <div class="container mx-auto px-6 py-8">
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Create New Candidate</h2>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">Add a new candidate to the election</p>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Create New Candidate</h2>
+            <p class="text-gray-600 dark:text-gray-400">Add a new candidate to the election system</p>
         </div>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+    <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
         @if ($errors->any())
         <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
             <div class="flex">
@@ -35,10 +35,11 @@
 
         <form action="{{ route('candidates.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="space-y-8">
+            <div class="space-y-8 p-6">
                 <!-- Personal Information Section -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                <div class="bg-gray-50 dark:bg-gray-750 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+                        <i class="fas fa-user-circle mr-2 text-blue-500"></i>
                         Personal Information
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -81,8 +82,9 @@
                 </div>
 
                 <!-- Academic Information Section -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                <div class="bg-gray-50 dark:bg-gray-750 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+                        <i class="fas fa-graduation-cap mr-2 text-green-500"></i>
                         Academic Information
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -113,8 +115,9 @@
                 </div>
 
                 <!-- Election Information Section -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                <div class="bg-gray-50 dark:bg-gray-750 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+                        <i class="fas fa-vote-yea mr-2 text-purple-500"></i>
                         Election Information
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -164,12 +167,50 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex justify-end space-x-3">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                    Create Candidate
-                </button>
+            <div class="bg-gray-50 dark:bg-gray-750 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex justify-end space-x-3">
+                    <a href="{{ route('candidates.index') }}" 
+                       class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200">
+                        Cancel
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                        <i class="fas fa-save mr-2"></i>
+                        Create Candidate
+                    </button>
+                </div>
             </div>
         </form>
     </div>
 </div>
+
+<style>
+    /* Custom styles for form inputs */
+    .form-input, .form-select {
+        @apply bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+    }
+    
+    /* Custom hover effects */
+    .form-input:hover, .form-select:hover {
+        @apply border-gray-400 dark:border-gray-500;
+    }
+
+    /* Custom section styling */
+    .dark .dark\:bg-gray-750 {
+        background-color: #1f2937;
+    }
+
+    /* Improve file input styling */
+    input[type="file"] {
+        @apply text-sm text-gray-500 dark:text-gray-400
+        file:mr-4 file:py-2 file:px-4
+        file:rounded-full file:border-0
+        file:text-sm file:font-semibold
+        file:bg-blue-50 file:text-blue-700
+        hover:file:bg-blue-100
+        dark:file:bg-blue-900 dark:file:text-blue-200
+        dark:hover:file:bg-blue-800
+        transition-all duration-200;
+    }
+</style>
 @endsection
