@@ -185,10 +185,10 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {{ $vote->voter->name }}
+                            {{ $vote->transaction_number }}
                         </p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">
-                            Voted for {{ $vote->position->name }} position
+                            {{ $vote->voter_type }} • {{ $vote->position->name }}
                             <span class="ml-2">{{ $vote->voted_at->diffForHumans() }}</span>
                         </p>
                     </div>
