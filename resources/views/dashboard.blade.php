@@ -188,7 +188,7 @@
                             {{ $vote->transaction_number }}
                         </p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">
-                            {{ $vote->voter_type }} • {{ $vote->position->name }}
+                            {{ $vote->voter_type }}
                             <span class="ml-2">{{ $vote->voted_at->diffForHumans() }}</span>
                         </p>
                     </div>

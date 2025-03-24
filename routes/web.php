@@ -41,6 +41,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
     Route::post('/maintenance/toggle', [MaintenanceController::class, 'toggle'])->name('maintenance.toggle');
     Route::post('/maintenance/message', [MaintenanceController::class, 'updateMessage'])->name('maintenance.message');
+    Route::get('casted_votes/{transaction_number}', [CastedVoteController::class, 'show'])->name('casted_votes.show');
 });
 
 // Profile routes

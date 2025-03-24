@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('casted_votes', function (Blueprint $table) {
             $table->bigIncrements('casted_vote_id');
-            $table->string('transaction_number');
             $table->unsignedBigInteger('voter_id');
             $table->unsignedBigInteger('position_id');
             $table->unsignedBigInteger('candidate_id');
+            $table->string('transaction_number');
             $table->string('vote_hash');
             $table->timestamp('voted_at');
             $table->timestamps();

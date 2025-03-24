@@ -36,8 +36,10 @@ class DashboardController extends Controller
             'votingPercentage' => $this->calculateVotingPercentage(),
         ];
 
-        // Recent voting activity
+        // Recent voting activity - modified to show unique transactions
         $data['recentVotes'] = CastedVote::with(['voter', 'position'])
+            ->select('transaction_number', 'voter_id', 'voted_at')
+            ->distinct('transaction_number')
             ->latest('voted_at')
             ->take(5)
             ->get();

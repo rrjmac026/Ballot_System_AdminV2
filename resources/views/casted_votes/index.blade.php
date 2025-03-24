@@ -22,7 +22,7 @@
                         Timestamp
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Details
+                        Action
                     </th>
                 </tr>
             </thead>
@@ -39,24 +39,12 @@
                         {{ $vote->voted_at->format('M d, Y h:i A') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        <button onclick="showDetails('{{ $vote->transaction_number }}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400">
-                            View Details
-                        </button>
+                        <a href="{{ route('casted_votes.show', $vote->transaction_number) }}" 
+                           class="text-blue-600 hover:text-blue-800 dark:text-blue-400 inline-flex items-center">
+                            <i class="fas fa-eye mr-2"></i> View Details
+                        </a>
                     </td>
                 </tr>
-                @if(isset($votingDetails[$vote->transaction_number]))
-                <tr class="hidden" id="details-{{ $vote->transaction_number }}">
-                    <td colspan="4" class="px-6 py-4 bg-gray-50 dark:bg-gray-700">
-                        <div class="space-y-2">
-                            @foreach($votingDetails[$vote->transaction_number] as $detail)
-                            <div class="text-sm text-gray-600 dark:text-gray-300">
-                                {{ $detail->candidate_details }}
-                            </div>
-                            @endforeach
-                        </div>
-                    </td>
-                </tr>
-                @endif
                 @endforeach
             </tbody>
         </table>
@@ -65,11 +53,4 @@
         </div>
     </div>
 </div>
-
-<script>
-function showDetails(transactionNumber) {
-    const detailsRow = document.getElementById(`details-${transactionNumber}`);
-    detailsRow.classList.toggle('hidden');
-}
-</script>
 @endsection

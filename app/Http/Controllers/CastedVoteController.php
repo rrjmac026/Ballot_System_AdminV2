@@ -73,10 +73,17 @@ class CastedVoteController extends Controller
         }
     }
 
-    public function show(CastedVote $castedVote)
+    public function show($transaction_number)
     {
-        $castedVote->load(['position', 'candidate.partylist', 'voter.college']);
-        return view('casted_votes.show', compact('castedVote'));
+        $transaction = CastedVote::where('transaction_number', $transaction_number)
+            ->with(['voter.college'])
+            ->firstOrFail();
+
+        $votingDetails = CastedVote::where('transaction_number', $transaction_number)
+            ->with(['position', 'candidate.partylist'])
+            ->get();
+
+        return view('casted_votes.show', compact('transaction', 'votingDetails'));
     }
 
     public function edit(CastedVote $castedVote)

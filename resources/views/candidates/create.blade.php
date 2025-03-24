@@ -35,137 +35,132 @@
 
         <form action="{{ route('candidates.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <!-- Basic Information -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- First Name -->
+            <div class="space-y-8">
+                <!-- Personal Information Section -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name</label>
-                    <input type="text" 
-                           name="first_name" 
-                           value="{{ old('first_name') }}"
-                           class="form-input w-full rounded-lg @error('first_name') border-red-500 @enderror">
-                    @error('first_name')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                        Personal Information
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name</label>
+                            <input type="text" name="first_name" value="{{ old('first_name') }}"
+                                   class="form-input w-full rounded-lg @error('first_name') border-red-500 @enderror">
+                            @error('first_name')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <!-- Photo Upload -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photo</label>
-                    <input type="file" 
-                           name="photo" 
-                           accept="image/*"
-                           class="form-input w-full rounded-lg @error('photo') border-red-500 @enderror">
-                    @error('photo')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Middle Name</label>
+                            <input type="text" name="middle_name" value="{{ old('middle_name') }}"
+                                   class="form-input w-full rounded-lg @error('middle_name') border-red-500 @enderror">
+                            @error('middle_name')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Middle Name</label>
-                    <input type="text" 
-                           name="middle_name" 
-                           value="{{ old('middle_name') }}"
-                           class="form-input w-full rounded-lg @error('middle_name') border-red-500 @enderror">
-                    @error('middle_name')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
+                            <input type="text" name="last_name" value="{{ old('last_name') }}"
+                                   class="form-input w-full rounded-lg @error('last_name') border-red-500 @enderror">
+                            @error('last_name')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
-                    <input type="text" 
-                           name="last_name" 
-                           value="{{ old('last_name') }}"
-                           class="form-input w-full rounded-lg @error('last_name') border-red-500 @enderror">
-                    @error('last_name')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photo</label>
+                            <input type="file" name="photo" accept="image/*"
+                                   class="form-input w-full rounded-lg @error('photo') border-red-500 @enderror">
+                            @error('photo')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Academic Information Section -->
-                <div class="col-span-3">
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2 mt-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
                         Academic Information
                     </h3>
-                </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">College</label>
+                            <select name="college_id" class="form-select w-full rounded-lg @error('college_id') border-red-500 @enderror">
+                                <option value="">Select College</option>
+                                @foreach($colleges as $college)
+                                    <option value="{{ $college->college_id }}" {{ old('college_id') == $college->college_id ? 'selected' : '' }}>
+                                        {{ $college->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('college_id')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">College</label>
-                    <select name="college_id" 
-                            class="form-select w-full rounded-lg @error('college_id') border-red-500 @enderror">
-                        <option value="">Select College</option>
-                        @foreach($colleges as $college)
-                            <option value="{{ $college->college_id }}"
-                                {{ old('college_id') == $college->college_id ? 'selected' : '' }}>
-                                {{ $college->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('college_id')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Course</label>
-                    <input type="text" 
-                           name="course" 
-                           value="{{ old('course') }}"
-                           class="form-input w-full rounded-lg @error('course') border-red-500 @enderror">
-                    @error('course')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Course</label>
+                            <input type="text" name="course" value="{{ old('course') }}"
+                                   class="form-input w-full rounded-lg @error('course') border-red-500 @enderror">
+                            @error('course')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Election Information Section -->
-                <div class="col-span-3">
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2 mt-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
                         Election Information
                     </h3>
-                </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Position</label>
+                            <select name="position_id" class="form-select w-full rounded-lg @error('position_id') border-red-500 @enderror">
+                                <option value="">Select Position</option>
+                                @foreach($positions as $position)
+                                    <option value="{{ $position->position_id }}" {{ old('position_id') == $position->position_id ? 'selected' : '' }}>
+                                        {{ $position->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('position_id')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Partylist</label>
-                    <select name="partylist_id" 
-                            class="form-select w-full rounded-lg @error('partylist_id') border-red-500 @enderror">
-                        <option value="">Select Partylist</option>
-                        @foreach($partylists as $partylist)
-                            <option value="{{ $partylist->partylist_id }}"
-                                {{ old('partylist_id') == $partylist->partylist_id ? 'selected' : '' }}>
-                                {{ $partylist->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('partylist_id')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Partylist</label>
+                            <select name="partylist_id" class="form-select w-full rounded-lg @error('partylist_id') border-red-500 @enderror">
+                                <option value="">Select Partylist</option>
+                                @foreach($partylists as $partylist)
+                                    <option value="{{ $partylist->partylist_id }}" {{ old('partylist_id') == $partylist->partylist_id ? 'selected' : '' }}>
+                                        {{ $partylist->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('partylist_id')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organization</label>
-                    <select name="organization_id" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200" required>
-                        @foreach($organizations as $organization)
-                            <option value="{{ $organization->organization_id }}">{{ $organization->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Position</label>
-                    <select name="position_id" 
-                            class="form-select w-full rounded-lg @error('position_id') border-red-500 @enderror">
-                        <option value="">Select Position</option>
-                        @foreach($positions as $position)
-                            <option value="{{ $position->position_id }}" 
-                                {{ old('position_id') == $position->position_id ? 'selected' : '' }}>
-                                {{ $position->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('position_id')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organization</label>
+                            <select name="organization_id" class="form-select w-full rounded-lg @error('organization_id') border-red-500 @enderror">
+                                <option value="">Select Organization</option>
+                                @foreach($organizations as $organization)
+                                    <option value="{{ $organization->organization_id }}">{{ $organization->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('organization_id')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
             </div>
 
