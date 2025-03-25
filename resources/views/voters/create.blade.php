@@ -51,8 +51,8 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sex</label>
                             <select name="sex" class="form-select w-full rounded-lg @error('sex') border-red-500 @enderror">
                                 <option value="">Select Gender</option>
-                                <option value="Male" {{ old('sex') == 'Male' ? 'selected' : '' }}>Male</option>
-                                <option value="Female" {{ old('sex') == 'Female' ? 'selected' : '' }}>Female</option>
+                                <option value="M" {{ old('sex') == 'Male' ? 'selected' : '' }}>Male</option>
+                                <option value="F" {{ old('sex') == 'Female' ? 'selected' : '' }}>Female</option>
                             </select>
                             @error('sex')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
