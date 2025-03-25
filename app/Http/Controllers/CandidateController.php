@@ -90,12 +90,8 @@ class CandidateController extends Controller
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $filename = time() . '_' . $photo->getClientOriginalName();
-                
-                // Store directly in public disk with correct path
-                $path = $photo->storeAs('candidates', $filename, 'public');
-                $data['photo'] = $filename;
-
-                \Log::info('Photo stored at: ' . $path); // Debug log
+                $photo->storeAs('public/candidates', $filename); // Store in public disk
+                $data['photo'] = $filename; // Save just the filename
             }
 
             $candidate = Candidate::create($data);

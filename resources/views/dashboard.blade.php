@@ -188,13 +188,48 @@
                             {{ $vote->transaction_number }}
                         </p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">
-                            {{ $vote->voter_type }}
+                            {{ $vote->voter->college->name }} - Year {{ $vote->voter->year_level }}
                             <span class="ml-2">{{ $vote->voted_at->diffForHumans() }}</span>
                         </p>
                     </div>
                 </div>
                 @endforeach
             </div>
+        </div>
+    </div>
+
+    <!-- Voting Information Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Voting Information</h4>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead>
+                    <tr>
+                        <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            Transaction Number
+                        </th>
+                        <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            Position Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach($votingData as $vote)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $vote->transaction_number }}
+                            </td>
+                            <td class="px-6 py-4">
+                                @foreach($vote->voting_details as $detail)
+                                    <div class="text-sm">
+                                        {{ $detail['position']->name }}: {{ $detail['candidate']->first_name }} {{ $detail['candidate']->last_name }}
+                                    </div>
+                                @endforeach
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -37,12 +37,30 @@ class DashboardController extends Controller
         ];
 
         // Recent voting activity - modified to show unique transactions
-        $data['recentVotes'] = CastedVote::with(['voter', 'position'])
-            ->select('transaction_number', 'voter_id', 'voted_at')
+        $data['recentVotes'] = CastedVote::with(['voter.college'])
+            ->select('transaction_number', 'voter_id', 'voted_at', 'votes')
             ->distinct('transaction_number')
             ->latest('voted_at')
             ->take(5)
             ->get();
+
+        $data['votingData'] = CastedVote::with(['voter.college'])
+            ->select('transaction_number', 'voter_id', 'voted_at', 'votes')
+            ->distinct('transaction_number')
+            ->latest('voted_at')
+            ->get()
+            ->each(function($vote) {
+                $vote->voting_details = collect($vote->votes)->map(function($candidateId, $positionId) {
+                    $position = Position::find($positionId);
+                    $candidate = Candidate::find($candidateId);
+                    if ($position && $candidate) {
+                        return [
+                            'position' => $position,
+                            'candidate' => $candidate
+                        ];
+                    }
+                })->filter();
+            });
 
         // Voting progress by college
         $data['collegeProgress'] = $this->getCollegeVotingProgress();
