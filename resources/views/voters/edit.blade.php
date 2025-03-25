@@ -58,12 +58,12 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year Level</label>
-                    <select name="year_level" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                        @for($i = 1; $i <= 5; $i++)
-                            <option value="{{ $i }}" {{ $voter->year_level == $i ? 'selected' : '' }}>
-                                {{ $i }}st Year
-                            </option>
-                        @endfor
+                    <select name="year_level" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                        <option value="">Select Year Level</option>
+                        <option value="1" {{ $voter->year_level == '1' ? 'selected' : '' }}>1st Year</option>
+                        <option value="2" {{ $voter->year_level == '2' ? 'selected' : '' }}>2nd Year</option>
+                        <option value="3" {{ $voter->year_level == '3' ? 'selected' : '' }}>3rd Year</option>
+                        <option value="4" {{ $voter->year_level == '4' ? 'selected' : '' }}>4th Year</option>
                     </select>
                 </div>
 

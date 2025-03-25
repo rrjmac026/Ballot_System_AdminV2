@@ -97,11 +97,10 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year Level</label>
                             <select name="year_level" class="form-select w-full rounded-lg @error('year_level') border-red-500 @enderror">
                                 <option value="">Select Year Level</option>
-                                @foreach(range(1, 4) as $year)
-                                    <option value="{{ $year }}" {{ old('year_level') == $year ? 'selected' : '' }}>
-                                        {{ $year }} Year
-                                    </option>
-                                @endforeach
+                                <option value="1" {{ old('year_level') == '1' ? 'selected' : '' }}>1st Year</option>
+                                <option value="2" {{ old('year_level') == '2' ? 'selected' : '' }}>2nd Year</option>
+                                <option value="3" {{ old('year_level') == '3' ? 'selected' : '' }}>3rd Year</option>
+                                <option value="4" {{ old('year_level') == '4' ? 'selected' : '' }}>4th Year</option>
                             </select>
                             @error('year_level')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>

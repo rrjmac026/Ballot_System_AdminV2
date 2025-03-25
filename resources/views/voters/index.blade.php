@@ -47,7 +47,24 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $voter->student_number }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $voter->college->name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $voter->course }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $voter->year_level }}st Year</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            @switch($voter->year_level)
+                                @case(1)
+                                    1st Year
+                                    @break
+                                @case(2)
+                                    2nd Year
+                                    @break
+                                @case(3)
+                                    3rd Year
+                                    @break
+                                @case(4)
+                                    4th Year
+                                    @break
+                                @default
+                                    N/A
+                            @endswitch
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $voter->status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                 {{ $voter->status }}

@@ -58,7 +58,15 @@ class Candidate extends Model
     public function castedVotes()
     {
         return $this->hasMany(CastedVote::class, 'votes->' . $this->position_id, 'candidate_id')
-            ->whereJsonContains("votes->{$this->position_id}", DB::raw('candidate_id'));
+            ->whereRaw('JSON_CONTAINS(votes, ?, ?)', [
+                $this->candidate_id, 
+                '$."' . $this->position_id . '"'
+            ]);
+    }
+
+    public function getCastedVotesCountAttribute()
+    {
+        return CastedVote::whereJsonContains('votes->' . $this->position_id, (string)$this->candidate_id)->count();
     }
 
     // Add this method for photo URL
@@ -68,11 +76,6 @@ class Candidate extends Model
             return Storage::disk('public')->url('candidates/' . $this->photo);
         }
         return asset('images/default-avatar.png');
-    }
-
-    public function getCastedVotesCountAttribute()
-    {
-        return CastedVote::whereJsonContains("votes->{$this->position_id}", (string)$this->candidate_id)->count();
     }
 
     public function getVoteCountAttribute()

@@ -17,9 +17,30 @@ use Illuminate\Support\Facades\Storage;
 
 class CandidateController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $candidates = Candidate::with(['position', 'college', 'partylist'])->get();
+        $query = Candidate::with(['position', 'college', 'partylist']);
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('middle_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('course', 'like', "%{$search}%")
+                  ->orWhereHas('position', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('college', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('partylist', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $candidates = $query->get();
         return view('candidates.index', compact('candidates'));
     }
 
