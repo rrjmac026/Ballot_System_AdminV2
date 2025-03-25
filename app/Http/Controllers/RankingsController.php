@@ -3,28 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Position;
-use App\Models\CastedVote;
 use App\Models\Candidate;
+use App\Models\CastedVote;
 use Illuminate\Support\Facades\DB;
 
 class RankingsController extends Controller
 {
     public function index()
     {
-        $positionRankings = Position::with(['candidates'])
-            ->get()
-            ->map(function ($position) {
-                $candidateVotes = Candidate::where('position_id', $position->position_id)
-                    ->withCount(['castedVotes'])
-                    ->orderByDesc('casted_votes_count')
-                    ->get();
+        $positions = Position::all();
+        $rankings = [];
 
-                return [
-                    'position' => $position,
-                    'candidates' => $candidateVotes
-                ];
-            });
+        foreach ($positions as $position) {
+            $candidates = Candidate::where('position_id', $position->position_id)
+                ->get()
+                ->map(function ($candidate) {
+                    $candidate->vote_count = $candidate->casted_votes_count;
+                    return $candidate;
+                })
+                ->sortByDesc('vote_count')
+                ->take(3);
 
-        return view('rankings.index', compact('positionRankings'));
+            if ($candidates->isNotEmpty()) {
+                $rankings[$position->name] = $candidates;
+            }
+        }
+
+        return view('rankings.index', compact('rankings'));
     }
 }

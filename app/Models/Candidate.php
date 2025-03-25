@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Candidate extends Model
 {
@@ -56,7 +57,8 @@ class Candidate extends Model
 
     public function castedVotes()
     {
-        return $this->hasMany(CastedVote::class, 'candidate_id', 'candidate_id');
+        return $this->hasMany(CastedVote::class, 'votes->' . $this->position_id, 'candidate_id')
+            ->whereJsonContains("votes->{$this->position_id}", DB::raw('candidate_id'));
     }
 
     // Add this method for photo URL
@@ -66,5 +68,15 @@ class Candidate extends Model
             return Storage::disk('public')->url('candidates/' . $this->photo);
         }
         return asset('images/default-avatar.png');
+    }
+
+    public function getCastedVotesCountAttribute()
+    {
+        return CastedVote::whereJsonContains("votes->{$this->position_id}", (string)$this->candidate_id)->count();
+    }
+
+    public function getVoteCountAttribute()
+    {
+        return CastedVote::whereJsonContains('votes->' . $this->position_id, $this->candidate_id)->count();
     }
 }

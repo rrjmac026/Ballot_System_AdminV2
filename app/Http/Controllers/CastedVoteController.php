@@ -80,8 +80,17 @@ class CastedVoteController extends Controller
             ->firstOrFail();
 
         $votingDetails = CastedVote::where('transaction_number', $transaction_number)
-            ->with(['position', 'candidate.partylist'])
-            ->get();
+            ->get()
+            ->map(function($vote) {
+                $votes = json_decode($vote->votes, true);
+                return collect($votes)->map(function($candidate_id, $position_id) {
+                    return [
+                        'position' => Position::find($position_id),
+                        'candidate' => Candidate::with('partylist')->find($candidate_id)
+                    ];
+                });
+            })
+            ->first();
 
         return view('casted_votes.show', compact('transaction', 'votingDetails'));
     }
