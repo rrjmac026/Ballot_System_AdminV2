@@ -21,6 +21,17 @@ class CandidateController extends Controller
     {
         $query = Candidate::with(['position', 'college', 'partylist']);
 
+        // Filter by position
+        if ($request->has('position_id') && $request->position_id != '') {
+            $query->where('position_id', $request->position_id);
+        }
+
+        // Filter by college
+        if ($request->has('college_id') && $request->college_id != '') {
+            $query->where('college_id', $request->college_id);
+        }
+
+        // Existing search functionality
         if ($request->has('search')) {
             $search = $request->get('search');
             $query->where(function($q) use ($search) {
@@ -41,7 +52,10 @@ class CandidateController extends Controller
         }
 
         $candidates = $query->get();
-        return view('candidates.index', compact('candidates'));
+        $positions = Position::all();
+        $colleges = College::all();
+
+        return view('candidates.index', compact('candidates', 'positions', 'colleges'));
     }
 
     public function create()

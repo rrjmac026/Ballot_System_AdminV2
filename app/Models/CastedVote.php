@@ -22,7 +22,9 @@ class CastedVote extends Model
         'voter_id',
         'votes', // ✅ Store multiple votes as JSON
         'vote_hash',
-        'voted_at'
+        'voted_at',
+        'ip_address',
+        'user_agent'
     ];
 
     protected $dates = ['voted_at'];
@@ -104,10 +106,17 @@ class CastedVote extends Model
         return $this->belongsTo(Voter::class, 'voter_id');
     }
 
-    public function position()
+    public function getCandidate($position_id)
     {
-        return $this->belongsTo(Position::class, 'votes', 'position_id')
-            ->whereJsonContains('votes', DB::raw('position_id'));
+        if (isset($this->votes[$position_id])) {
+            return Candidate::find($this->votes[$position_id]);
+        }
+        return null;
+    }
+
+    public function candidates()
+    {
+        return Candidate::whereIn('candidate_id', collect($this->votes)->values());
     }
 
     // Helper method to get position data
@@ -123,5 +132,31 @@ class CastedVote extends Model
         $position_id = array_key_first($votes);
         $position = $this->getPosition($position_id);
         return $position ? $position->name : 'Unknown Position';
+    }
+
+    public function getCandidateVotes()
+    {
+        return collect($this->votes)->map(function($candidateId, $positionId) {
+            $candidate = Candidate::find($candidateId);
+            $position = Position::find($positionId);
+            return [
+                'position' => $position,
+                'candidate' => $candidate
+            ];
+        });
+    }
+
+    public function getCandidatesAttribute()
+    {
+        $candidateIds = collect($this->votes)->values();
+        return Candidate::whereIn('candidate_id', $candidateIds)->get();
+    }
+
+    public function getVotedCandidateForPosition($positionId)
+    {
+        if (isset($this->votes[$positionId])) {
+            return Candidate::find($this->votes[$positionId]);
+        }
+        return null;
     }
 }

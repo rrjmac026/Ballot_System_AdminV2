@@ -44,6 +44,17 @@
                             <i class="fas fa-eye mr-2"></i> View Details
                         </a>
                     </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        @if(isset($votingDetails[$vote->transaction_number]) && is_array($votingDetails[$vote->transaction_number]))
+                            @foreach($votingDetails[$vote->transaction_number] as $detail)
+                                <div>
+                                    {{ $detail['position']->name }}: {{ $detail['candidate']->first_name }} {{ $detail['candidate']->last_name }}
+                                </div>
+                            @endforeach
+                        @else
+                            <div>No voting details available</div>
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

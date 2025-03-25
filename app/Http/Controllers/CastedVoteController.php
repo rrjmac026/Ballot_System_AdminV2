@@ -17,15 +17,29 @@ class CastedVoteController extends Controller
     public function index()
     {
         $castedVotes = CastedVote::with(['voter.college'])
-            ->select(['transaction_number', 'voter_id', 'voted_at'])
+            ->select(['transaction_number', 'voter_id', 'voted_at', 'votes'])
             ->distinct('transaction_number')
             ->latest('voted_at')
             ->paginate(15);
 
-        $votingDetails = CastedVote::with(['candidate.partylist'])
-            ->get()
-            ->groupBy('transaction_number');
-            
+        $votingDetails = [];
+        foreach ($castedVotes as $vote) {
+            $details = [];
+            if (is_array($vote->votes)) {
+                foreach ($vote->votes as $positionId => $candidateId) {
+                    $candidate = Candidate::find($candidateId);
+                    $position = Position::find($positionId);
+                    if ($candidate && $position) {
+                        $details[] = [
+                            'position' => $position,
+                            'candidate' => $candidate
+                        ];
+                    }
+                }
+            }
+            $votingDetails[$vote->transaction_number] = $details;
+        }
+
         return view('casted_votes.index', compact('castedVotes', 'votingDetails'));
     }
 
@@ -79,18 +93,20 @@ class CastedVoteController extends Controller
             ->with(['voter.college'])
             ->firstOrFail();
 
-        $votingDetails = CastedVote::where('transaction_number', $transaction_number)
-            ->get()
-            ->map(function($vote) {
-                $votes = json_decode($vote->votes, true);
-                return collect($votes)->map(function($candidate_id, $position_id) {
-                    return [
-                        'position' => Position::find($position_id),
-                        'candidate' => Candidate::with('partylist')->find($candidate_id)
+        $votingDetails = [];
+        if (is_array($transaction->votes)) {
+            foreach ($transaction->votes as $positionId => $candidateId) {
+                $position = Position::find($positionId);
+                $candidate = Candidate::with('partylist')->find($candidateId);
+                if ($position && $candidate) {
+                    $votingDetails[] = [
+                        'position' => $position->name,
+                        'candidate_name' => $candidate->first_name . ' ' . $candidate->last_name,
+                        'partylist' => $candidate->partylist ? $candidate->partylist->name : 'N/A'
                     ];
-                });
-            })
-            ->first();
+                }
+            }
+        }
 
         return view('casted_votes.show', compact('transaction', 'votingDetails'));
     }

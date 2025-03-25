@@ -12,6 +12,54 @@
         </a>
     </div>
 
+    <!-- Add Search Form -->
+    <div class="mb-6">
+        <form action="{{ route('candidates.index') }}" method="GET" class="flex flex-col space-y-4">
+            <div class="flex gap-4">
+                <input type="text" 
+                       name="search" 
+                       value="{{ request('search') }}" 
+                       placeholder="Search candidates..."
+                       class="flex-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                <button type="submit" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    <i class="fas fa-search mr-2"></i>
+                    Search
+                </button>
+                @if(request('search') || request('position_id') || request('college_id'))
+                    <a href="{{ route('candidates.index') }}" 
+                       class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200">
+                        Clear All
+                    </a>
+                @endif
+            </div>
+
+            <div class="flex gap-4">
+                <select name="position_id" 
+                        class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                        onchange="this.form.submit()">
+                    <option value="">All Positions</option>
+                    @foreach($positions as $position)
+                        <option value="{{ $position->position_id }}" {{ request('position_id') == $position->position_id ? 'selected' : '' }}>
+                            {{ $position->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <select name="college_id" 
+                        class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                        onchange="this.form.submit()">
+                    <option value="">All Colleges</option>
+                    @foreach($colleges as $college)
+                        <option value="{{ $college->college_id }}" {{ request('college_id') == $college->college_id ? 'selected' : '' }}>
+                            {{ $college->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+    </div>
+
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
