@@ -56,6 +56,17 @@
                         </option>
                     @endforeach
                 </select>
+
+                <select name="partylist_id"
+                        class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                        onchange="this.form.submit()">
+                    <option value="">All Partylists</option>
+                    @foreach($partylists as $partylist)
+                        <option value="{{ $partylist->partylist_id }}" {{ request('partylist_id') == $partylist->partylist_id ? 'selected' : '' }}>
+                            {{ $partylist->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </form>
     </div>
