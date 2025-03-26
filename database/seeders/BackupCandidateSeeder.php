@@ -100,6 +100,7 @@ class CandidateSeeder extends Seeder
 
         ];
 
+            
         // Insert candidates while preventing duplicates
         foreach ($candidates as $candidate) {
             DB::table('candidates')->updateOrInsert(

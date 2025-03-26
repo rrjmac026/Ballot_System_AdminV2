@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->unsignedBigInteger('position_id');
-            $table->unsignedBigInteger('partylist_id');
+            $table->unsignedBigInteger('partylist_id')->nullable();
             $table->unsignedBigInteger('college_id');
             $table->string('course');
             $table->string('photo')->nullable();
