@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Storage;
 
 class CandidateController extends Controller
 {
+    private function getPhotoUrl($candidate)
+    {
+        if ($candidate->photo) {
+            return asset('storage/candidates/' . $candidate->photo);
+        }
+        return asset('images/default-avatar.png');
+    }
+
     public function index(Request $request)
     {
         $query = Candidate::with(['position', 'college', 'partylist']);
@@ -57,6 +65,9 @@ class CandidateController extends Controller
         }
 
         $candidates = $query->get();
+        foreach ($candidates as $candidate) {
+            $candidate->photo_url = $this->getPhotoUrl($candidate);
+        }
         $positions = Position::all();
         $colleges = College::all();
         $partylists = Partylist::all();
@@ -96,8 +107,8 @@ class CandidateController extends Controller
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $filename = time() . '_' . $photo->getClientOriginalName();
-                $photo->storeAs('public/candidates', $filename); // Store in public disk
-                $data['photo'] = $filename; // Save just the filename
+                Storage::disk('public')->putFileAs('candidates', $photo, $filename);
+                $data['photo'] = $filename;
             }
 
             $candidate = Candidate::create($data);
@@ -116,11 +127,13 @@ class CandidateController extends Controller
 
     public function show(Candidate $candidate)
     {
+        $candidate->photo_url = $this->getPhotoUrl($candidate);
         return view('candidates.show', compact('candidate'));
     }
 
     public function edit(Candidate $candidate)
     {
+        $candidate->photo_url = $this->getPhotoUrl($candidate);
         $partylists = Partylist::all();
         $organizations = Organization::all();
         $positions = Position::all();
@@ -152,12 +165,12 @@ class CandidateController extends Controller
             if ($request->hasFile('photo')) {
                 // Delete old photo if exists
                 if ($candidate->photo) {
-                    Storage::delete('public/candidates/' . $candidate->photo);
+                    Storage::disk('public')->delete('candidates/' . $candidate->photo);
                 }
                 
                 $photo = $request->file('photo');
                 $filename = time() . '_' . $photo->getClientOriginalName();
-                $photo->storeAs('public/candidates', $filename);
+                Storage::disk('public')->putFileAs('candidates', $photo, $filename);
                 $data['photo'] = $filename;
             }
 

@@ -10,6 +10,27 @@ class CandidateSeeder extends Seeder
     public function run()
     {
         $candidates = [
+
+             // SINAGTALA PARTYLIST Candidates
+             ['first_name' => 'Carlo Jacky', 'middle_name' => 'S.', 'last_name' => 'Ellevera', 'position_id' => 1, 'partylist_id' => 1, 'college_id' => 3, 'course' => 'AB-PHILO'],
+             ['first_name' => 'Raymond Joseph', 'middle_name' => 'D.', 'last_name' => 'Normor', 'position_id' => 2, 'partylist_id' => 1, 'college_id' => 1, 'course' => 'BSN'],
+             ['first_name' => 'Junn Llenard', 'middle_name' => null, 'last_name' => 'Pancho', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 1, 'course' => 'BSN'],
+             ['first_name' => 'Bea', 'middle_name' => 'E.', 'last_name' => 'Pahuyo', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 5, 'course' => 'BSA'],
+             ['first_name' => 'Rica', 'middle_name' => 'B.', 'last_name' => 'Tubil', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 5, 'course' => 'BSA'],
+             ['first_name' => 'Julliana Nash Allyson', 'middle_name' => 'L.', 'last_name' => 'Pacursa', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 3, 'course' => 'AB-PHILO'],
+             ['first_name' => 'Jan Kenneth', 'middle_name' => 'M.', 'last_name' => 'Vargas', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+             ['first_name' => 'Jhunine', 'middle_name' => 'P.', 'last_name' => 'Pontillas', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+             ['first_name' => 'Michael Angelo', 'middle_name' => 'Q.', 'last_name' => 'Cancamo', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 2, 'course' => 'BSIT'],
+             ['first_name' => 'Amerah', 'middle_name' => 'M.', 'last_name' => 'Abdusamad', 'position_id' => 3, 'partylist_id' => 1, 'college_id' => 3, 'course' => 'BS-BIO'],
+             
+             // HIRAYA PARTYLIST Candidates
+             ['first_name' => 'Roxanne Mae', 'middle_name' => 'J.', 'last_name' => 'Ortega', 'position_id' => 1, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'AB-ENG'],
+             ['first_name' => 'Edric Lance', 'middle_name' => 'O.', 'last_name' => 'Gabrinez', 'position_id' => 2, 'partylist_id' => 3, 'college_id' => 6, 'course' => 'BPED'],
+             ['first_name' => 'Keevo Arn', 'middle_name' => 'J.', 'last_name' => 'Delfin', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSBA-FM A'],
+             ['first_name' => 'Van Argus', 'middle_name' => 'Y.', 'last_name' => 'Dumalahay', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'AB-ENG'],
+             ['first_name' => 'Chona Mae', 'middle_name' => 'E.', 'last_name' => 'Nalda', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'BS-ES'],
+             ['first_name' => 'Neil Jasper', 'middle_name' => 'L.', 'last_name' => 'Dinlayan', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA'],
+ 
             // ✅ CON-SBO (SINAGTALA PARTYLIST) Candidates
             ['first_name' => 'Trixy', 'middle_name' => 'J.', 'last_name' => 'Morales', 'position_id' => 4, 'partylist_id' => 1, 'college_id' => 1, 'course' => 'BSN'],
             ['first_name' => 'Ann Francis', 'middle_name' => 'B.', 'last_name' => 'Waban', 'position_id' => 5, 'partylist_id' => 1, 'college_id' => 1, 'course' => 'BSN'],

@@ -69,15 +69,6 @@ class Candidate extends Model
         return CastedVote::whereJsonContains('votes->' . $this->position_id, (string)$this->candidate_id)->count();
     }
 
-    // Add this method for photo URL
-    public function getPhotoUrlAttribute()
-    {
-        if ($this->photo) {
-            return Storage::disk('public')->url('candidates/' . $this->photo);
-        }
-        return asset('images/default-avatar.png');
-    }
-
     public function getVoteCountAttribute()
     {
         return CastedVote::whereJsonContains('votes->' . $this->position_id, $this->candidate_id)->count();
