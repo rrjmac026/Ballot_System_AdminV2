@@ -27,7 +27,7 @@ class CandidateSeeder extends Seeder
              ['first_name' => 'Roxanne Mae', 'middle_name' => 'J.', 'last_name' => 'Ortega', 'position_id' => 1, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'AB-ENG'],
              ['first_name' => 'Edric Lance', 'middle_name' => 'O.', 'last_name' => 'Gabrinez', 'position_id' => 2, 'partylist_id' => 3, 'college_id' => 6, 'course' => 'BPED'],
              ['first_name' => 'Keevo Arn', 'middle_name' => 'J.', 'last_name' => 'Delfin', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSBA-FM A'],
-             ['first_name' => 'Van Argus', 'middle_name' => 'Y.', 'last_name' => 'Dumalahay', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'AB-ENG'],
+             ['first_name' => 'Van Fergus', 'middle_name' => 'Y.', 'last_name' => 'Dumalahay', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'AB-ENG'],
              ['first_name' => 'Chona Mae', 'middle_name' => 'E.', 'last_name' => 'Nalda', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 3, 'course' => 'BS-ES'],
              ['first_name' => 'Neil Jasper', 'middle_name' => 'L.', 'last_name' => 'Dinlayan', 'position_id' => 3, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA'],
  

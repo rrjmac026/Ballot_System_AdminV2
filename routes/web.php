@@ -42,6 +42,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/maintenance/toggle', [MaintenanceController::class, 'toggle'])->name('maintenance.toggle');
     Route::post('/maintenance/message', [MaintenanceController::class, 'updateMessage'])->name('maintenance.message');
     Route::get('casted_votes/{transaction_number}', [CastedVoteController::class, 'show'])->name('casted_votes.show');
+    Route::post('/candidates/bulk-delete', [CandidateController::class, 'bulkDelete'])->name('candidates.bulk-delete');
 });
 
 // Profile routes

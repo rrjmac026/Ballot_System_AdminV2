@@ -42,7 +42,7 @@
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                         <div class="w-32 h-32 mb-4">
                             @if($candidate->photo)
-                                <img src="{{ asset('storage/candidates/' . $candidate->photo) }}" 
+                                <img src="{{ $candidate->photo_url }}" 
                                      alt="{{ $candidate->first_name }}'s photo" 
                                      class="w-full h-full object-cover rounded-lg">
                             @else

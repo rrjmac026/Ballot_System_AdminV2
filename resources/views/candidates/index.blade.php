@@ -90,7 +90,7 @@
                             <div class="flex items-center">
                                 @if($candidate->photo)
                                     <img class="h-10 w-10 rounded-full object-cover" 
-                                         src="{{ asset('storage/candidates/' . $candidate->photo) }}" 
+                                    src="{{ $candidate->photo_url }}" 
                                          alt="{{ $candidate->first_name }}'s photo">
                                 @else
                                     <div class="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">

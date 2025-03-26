@@ -20,7 +20,7 @@ class CandidateController extends Controller
     private function getPhotoUrl($candidate)
     {
         if ($candidate->photo) {
-            return asset('storage/candidates/' . $candidate->photo);
+            return asset('images/candidates/' . $candidate->photo);
         }
         return asset('images/default-avatar.png');
     }
@@ -64,10 +64,10 @@ class CandidateController extends Controller
             });
         }
 
-        $candidates = $query->get();
-        foreach ($candidates as $candidate) {
+        $candidates = $query->get()->map(function($candidate) {
             $candidate->photo_url = $this->getPhotoUrl($candidate);
-        }
+            return $candidate;
+        });
         $positions = Position::all();
         $colleges = College::all();
         $partylists = Partylist::all();
@@ -107,7 +107,8 @@ class CandidateController extends Controller
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $filename = time() . '_' . $photo->getClientOriginalName();
-                Storage::disk('public')->putFileAs('candidates', $photo, $filename);
+                // Store directly in public/images/candidates
+                $photo->move(public_path('images/candidates'), $filename);
                 $data['photo'] = $filename;
             }
 
@@ -165,12 +166,16 @@ class CandidateController extends Controller
             if ($request->hasFile('photo')) {
                 // Delete old photo if exists
                 if ($candidate->photo) {
-                    Storage::disk('public')->delete('candidates/' . $candidate->photo);
+                    $oldPhotoPath = public_path('images/candidates/' . $candidate->photo);
+                    if (file_exists($oldPhotoPath)) {
+                        unlink($oldPhotoPath);
+                    }
                 }
                 
                 $photo = $request->file('photo');
                 $filename = time() . '_' . $photo->getClientOriginalName();
-                Storage::disk('public')->putFileAs('candidates', $photo, $filename);
+                // Store directly in public/images/candidates
+                $photo->move(public_path('images/candidates'), $filename);
                 $data['photo'] = $filename;
             }
 
@@ -199,6 +204,36 @@ class CandidateController extends Controller
                 ->with('success', 'Candidate deleted successfully');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Failed to delete candidate: ' . $e->getMessage()]);
+        }
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $ids = $request->input('ids', []);
+            
+            // Get candidates with photos
+            $candidates = Candidate::whereIn('candidate_id', $ids)->get();
+            
+            foreach ($candidates as $candidate) {
+                if ($candidate->photo) {
+                    $photoPath = public_path('images/candidates/' . $candidate->photo);
+                    if (file_exists($photoPath)) {
+                        unlink($photoPath);
+                    }
+                }
+            }
+
+            // Delete the candidates
+            Candidate::whereIn('candidate_id', $ids)->delete();
+            
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Selected candidates deleted successfully']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Bulk delete failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to delete selected candidates'], 500);
         }
     }
 }
