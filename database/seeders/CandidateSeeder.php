@@ -11,17 +11,16 @@ class CandidateSeeder extends Seeder
     {
         $candidates = [
             // ✅ CON-SBO (SINAGTALA PARTYLIST) Candidates
-            ['first_name' => 'Trixy', 'middle_name' => 'J.', 'last_name' => 'Morales', 'position_id' => 4, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Ann Francis', 'middle_name' => 'B.', 'last_name' => 'Waban', 'position_id' => 5, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Tisha Nigella', 'middle_name' => 'D.', 'last_name' => 'Encabo', 'position_id' => 6, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Alexa Iris', 'middle_name' => 'V.', 'last_name' => 'Ledres', 'position_id' => 7, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Febbie Rose', 'middle_name' => 'M.', 'last_name' => 'Ucat', 'position_id' => 8, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Ma. Patricia Celine', 'middle_name' => 'G.', 'last_name' => 'Saavedra', 'position_id' => 9, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Angel Grace', 'middle_name' => null, 'last_name' => 'Yulo', 'position_id' => 10, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Regine Mae', 'middle_name' => 'M.', 'last_name' => 'Sebandal', 'position_id' => 11, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Vince Lucas', 'middle_name' => 'G.', 'last_name' => 'Saavedra', 'position_id' => 14, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Queen Zandarra', 'middle_name' => 'L.', 'last_name' => 'Pendatun', 'position_id' => 13, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
-            ['first_name' => 'Xylexa Kaye', 'middle_name' => 'C.', 'last_name' => 'Chan', 'position_id' => 12, 'partylist_id' => 3, 'college_id' => 1, 'course' => 'BSN'],
+            ['first_name' => 'Rejhan', 'middle_name' => null, 'last_name' => 'Dela Cerna', 'position_id' => 4, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Marviene Angelic', 'middle_name' => null, 'last_name' => 'Caballero', 'position_id' => 5, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Mechaila Joy', 'middle_name' => null, 'last_name' => 'Marcos', 'position_id' => 6, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Prencess Michien', 'middle_name' => null, 'last_name' => 'Barace', 'position_id' => 7, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Christza', 'middle_name' => null, 'last_name' => 'Parista', 'position_id' => 8, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Chelsey Mae', 'middle_name' => null, 'last_name' => 'Donasco', 'position_id' => 9, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Carole Ann', 'middle_name' => null, 'last_name' => 'Abobo', 'position_id' => 10, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Justine Jay', 'middle_name' => null, 'last_name' => 'Boone', 'position_id' => 11, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Zyrylle Keyth', 'middle_name' => null, 'last_name' => 'Saguinhon', 'position_id' => 13, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
+            ['first_name' => 'Princess', 'middle_name' => null, 'last_name' => 'Delfin', 'position_id' => 12, 'partylist_id' => 1, 'college_id' => 4, 'course' => 'BPA'],
             
             //COT-SBO (HIRAYA PARTYLIST) Candidates
             ['first_name' => 'Jhon Lester', 'middle_name' => null, 'last_name' => 'Ybañez', 'position_id' => 4, 'partylist_id' => 3, 'college_id' => 2, 'course' => 'BSIT'],
@@ -37,17 +36,17 @@ class CandidateSeeder extends Seeder
             ['first_name' => 'Carlitos Mari', 'middle_name' => null, 'last_name' => 'Simene', 'position_id' => 12, 'partylist_id' => 3, 'college_id' => 2, 'course' => 'BSIT'],
 
             // ✅ COB-SBO (BANAAG PARTYLIST)
-            ['first_name' => 'Aliah', 'middle_name' => 'S.', 'last_name' => 'Namocot', 'position_id' => 4, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSBA-FM A'],
-            ['first_name' => 'Lian Carl', 'middle_name' => 'T.', 'last_name' => 'Viloria', 'position_id' => 5, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSBA-FM A'],
-            ['first_name' => 'Methusilah', 'middle_name' => 'P.', 'last_name' => 'Vito', 'position_id' => 6, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSHM'],
-            ['first_name' => 'Allaiza Mae', 'middle_name' => 'C.', 'last_name' => 'Niedo', 'position_id' => 7, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSA'],
-            ['first_name' => 'Jeanneil', 'middle_name' => 'C.', 'last_name' => 'Lira', 'position_id' => 8, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSA'],
-            ['first_name' => 'Hannah Dale', 'middle_name' => 'S.', 'last_name' => 'Fernandez', 'position_id' => 9, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSA'],
-            ['first_name' => 'Dona Jane', 'middle_name' => 'S.', 'last_name' => 'Belandres', 'position_id' => 10, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSBA-FM A'],
-            ['first_name' => 'Joylyn', 'middle_name' => 'M.', 'last_name' => 'Raut', 'position_id' => 11, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSA'],
-            ['first_name' => 'Luis Clyde', 'middle_name' => 'M.', 'last_name' => 'Salvo', 'position_id' => 14, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSBA-FM A'],
-            ['first_name' => 'Joshua', 'middle_name' => 'T.', 'last_name' => 'Manaran', 'position_id' => 13, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSHM'],
-            ['first_name' => 'Joshua Jave', 'middle_name' => 'T.N.', 'last_name' => 'Dinlayan', 'position_id' => 12, 'partylist_id' => 3, 'college_id' => 5, 'course' => 'BSHM'], 
+            ['first_name' => 'Aliah', 'middle_name' => 'S.', 'last_name' => 'Namocot', 'position_id' => 4, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSBA-FM A'],
+            ['first_name' => 'Lian Carl', 'middle_name' => 'T.', 'last_name' => 'Viloria', 'position_id' => 5, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSBA-FM A'],
+            ['first_name' => 'Methusilah', 'middle_name' => 'P.', 'last_name' => 'Vito', 'position_id' => 6, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSHM'],
+            ['first_name' => 'Allaiza Mae', 'middle_name' => 'C.', 'last_name' => 'Niedo', 'position_id' => 7, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSA'],
+            ['first_name' => 'Jeanneil', 'middle_name' => 'C.', 'last_name' => 'Lira', 'position_id' => 8, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSA'],
+            ['first_name' => 'Hannah Dale', 'middle_name' => 'S.', 'last_name' => 'Fernandez', 'position_id' => 9, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSA'],
+            ['first_name' => 'Dona Jane', 'middle_name' => 'S.', 'last_name' => 'Belandres', 'position_id' => 10, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSBA-FM A'],
+            ['first_name' => 'Joylyn', 'middle_name' => 'M.', 'last_name' => 'Raut', 'position_id' => 11, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSA'],
+            ['first_name' => 'Luis Clyde', 'middle_name' => 'M.', 'last_name' => 'Salvo', 'position_id' => 14, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSBA-FM A'],
+            ['first_name' => 'Joshua', 'middle_name' => 'T.', 'last_name' => 'Manaran', 'position_id' => 13, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSHM'],
+            ['first_name' => 'Joshua Jave', 'middle_name' => 'T.N.', 'last_name' => 'Dinlayan', 'position_id' => 12, 'partylist_id' => 2, 'college_id' => 5, 'course' => 'BSHM'], 
             
             //COE-SBO (HIRAYA PARTYLIST)
             ['first_name' => 'Ma. Sheinah', 'middle_name' => 'M.', 'last_name' => 'Salvo', 'position_id' => 4, 'partylist_id' => 3, 'college_id' => 6, 'course' => 'BSED-SCI'],
