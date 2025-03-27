@@ -12,6 +12,8 @@
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            position: relative;
         }
         .header { 
             position: fixed;
@@ -27,17 +29,13 @@
         }
         .footer {
             position: fixed;
-            bottom: -50px;
-            left: 0;
-            right: 0;
-            height: 50px;
-            background-color: white;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
             border-top: 1px solid #ddd;
-            padding-top: 10px;
-            margin-top: 20px;
+            padding: 10px 0;
+            background: white;
+            text-align: center;
         }
         .footer .pagenum:before {
             content: counter(page);
@@ -96,6 +94,7 @@
         }
         .main-content {
             margin-bottom: 50px; /* Space for footer */
+            padding-bottom: 50px; /* Space for footer */
         }
     </style>
 </head>
@@ -114,31 +113,38 @@
             <p>Voter Turnout: {{ $totalVoters > 0 ? round(($totalVoted / $totalVoters) * 100, 2) : 0 }}%</p>
         </div>
 
-        @foreach($positions as $position)
-        <div class="position-section">
-            <h3 class="position-title">{{ $position->name }}</h3>
-            <table>
-                <thead>
+        <table>
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Candidate</th>
+                    <th>Partylist</th>
+                    <th>Votes</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($positions as $position)
+                    @foreach($position->candidates as $index => $candidate)
                     <tr>
-                        <th>Candidate</th>
-                        <th>Partylist</th>
-                        <th>Votes</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($position->candidates as $candidate)
-                    <tr>
+                        @if($loop->first)
+                            <td rowspan="{{ count($position->candidates) }}" style="background: #f3f4f6; font-weight: bold;">
+                                {{ $position->name }}
+                            </td>
+                        @endif
                         <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
                         <td>{{ $candidate->partylist->acronym }}</td>
                         <td>{{ $candidate->vote_count }}</td>
                         <td>{{ $totalVoted > 0 ? round(($candidate->vote_count / $totalVoted) * 100, 2) : 0 }}%</td>
                     </tr>
                     @endforeach
-                </tbody>
-            </table>
-        </div>
-        @endforeach
+                    <!-- Add separator between positions -->
+                    @if(!$loop->last)
+                    <tr><td colspan="5" style="border-bottom: 2px solid #ddd;"></td></tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
     <div class="footer">
