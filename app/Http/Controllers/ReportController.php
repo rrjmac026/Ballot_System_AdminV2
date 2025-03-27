@@ -7,7 +7,7 @@ use App\Models\College;
 use App\Models\CastedVote;
 use App\Models\Voter;
 use Illuminate\Http\Request;
-use PDF;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class ReportController extends Controller
 {
@@ -38,8 +38,13 @@ class ReportController extends Controller
             $filename = 'election_results';
         }
 
-        $pdf = PDF::loadView($view, $data);
-        return $pdf->download($filename . '_' . now()->format('Y-m-d') . '.pdf');
+        // Generate PDF using Spatie's PDF without browser dependencies
+        return Pdf::view($view, $data)
+            ->format('a4')
+            ->margins(15, 15, 15, 15)
+            ->userPassword(false) // No password protection
+            ->name($filename . '_' . now()->format('Y-m-d') . '.pdf')
+            ->download();
     }
 
     private function getReportData()

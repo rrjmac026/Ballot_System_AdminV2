@@ -60,8 +60,8 @@
                     </div>
                     <!-- Image/Illustration -->
                     <div class="relative">
-                        <img src="{{ asset('images/tab_icon.png') }}" alt="BukSU Comelec" class="w-full max-w-lg mx-auto">
-                        <div class="absolute inset-0 bg-gradient-to-r from-[#FF9800]/20 to-transparent rounded-xl"></div>
+                        <img src="{{ asset('images/tab_icon.png') }}" alt="BukSU Comelec" class="w-full rounded-xl shadow-lg">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl"></div>
                     </div>
                 </div>
             </div>

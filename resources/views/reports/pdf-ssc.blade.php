@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Supreme Student Council Election Results</title>
+    <title>SSC Election Results</title>
     <style>
         @page { 
-            margin: 120px 50px 70px 50px; /* Adjusted margins */
+            margin: 60px 50px 90px 50px; /* Adjusted margins */
         }
         body { 
             font-family: sans-serif; 
@@ -19,6 +19,11 @@
             left: 0;
             right: 0;
             text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
         }
         .footer {
             position: fixed;
@@ -28,47 +33,60 @@
             height: 50px;
             background-color: white;
             text-align: center;
-            font-size: 12px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            color: #666;
+            font-size: 10px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 15px;
+            color: #6b7280;
             margin-top: 20px;
         }
         .footer .pagenum:before {
             content: counter(page);
         }
         .page-break { page-break-after: always; }
-        .header h1 { color: #1a56db; margin-bottom: 10px; }
+        .header h1 { 
+            color: white; 
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
         .college-info { text-align: center; margin-bottom: 20px; }
         .section { margin-bottom: 30px; }
         .position-title { 
-            color: #1a56db; 
-            border-bottom: 2px solid #1a56db; 
-            margin-bottom: 15px;
-            font-size: 20px;
-            padding-bottom: 5px;
+            background: #1e40af;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 18px;
         }
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-bottom: 20px;
             background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
         th { 
-            background-color: #f3f4f6;
-            color: #1f2937;
-            font-weight: bold;
+            background: #2563eb;
+            color: white;
+            padding: 12px 15px;
+            font-weight: 600;
         }
         th, td { 
-            padding: 12px; 
+            padding: 12px 15px; 
             text-align: left; 
             border-bottom: 1px solid #e5e7eb;
         }
         .stats { 
-            background: #f3f4f6; 
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-left: 4px solid #3b82f6;
             padding: 20px; 
             border-radius: 8px; 
             margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .stats h3 {
             color: #1a56db;
@@ -76,7 +94,7 @@
             margin-bottom: 15px;
         }
         .winner {
-            background-color: #f0fdf4;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
             font-weight: bold;
         }
         .content {

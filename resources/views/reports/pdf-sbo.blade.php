@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{ $college->name }} SBO Election Results</title>
+    <title>{{ $college->name }} SBO Results</title>
     <style>
         @page { 
-            margin: 120px 50px 70px 50px;
+            margin: 60px 50px 90px 50px;
         }
         body { 
             font-family: sans-serif; 
@@ -19,6 +19,11 @@
             left: 0;
             right: 0;
             text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #581c87 0%, #7e22ce 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
         }
         .footer {
             position: fixed;
@@ -38,13 +43,48 @@
             content: counter(page);
         }
         .page-break { page-break-after: always; }
-        .header h1 { color: #7e22ce; margin-bottom: 10px; }
+        .header h1, .header h2 { 
+            color: white;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
         .college-info { text-align: center; margin-bottom: 20px; }
         .section { margin-bottom: 30px; }
-        .position-title { color: #7e22ce; border-bottom: 2px solid #7e22ce; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
-        .stats { background: #f3f4f6; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .position-title { 
+            background: #581c87;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th { 
+            background: #7e22ce;
+            color: white;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+        td { 
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .stats { 
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-left: 4px solid #7e22ce;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
         .content {
             margin-top: 40px;
             margin-bottom: 60px;

@@ -4,21 +4,39 @@
     <meta charset="utf-8">
     <title>Election Results Report</title>
     <style>
+        @page { margin: 60px 50px 90px 50px; }
         body { font-family: sans-serif; line-height: 1.6; }
         .page-break { page-break-after: always; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .section { margin-bottom: 30px; }
+        .header {
+            padding: 20px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #0f172a;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
         .progress-bar { 
-            width: 100%;
-            background: #eee;
-            padding: 3px;
-            border-radius: 3px;
-            margin: 5px 0;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
         }
         .progress-bar div {
-            background: #4299e1;
-            height: 20px;
-            border-radius: 3px;
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+            height: 100%;
+            border-radius: 5px;
         }
         .stats { margin-bottom: 10px; }
         table { width: 100%; border-collapse: collapse; }
