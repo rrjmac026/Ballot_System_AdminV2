@@ -12,8 +12,12 @@ class RankingsController extends Controller
     {
         $rankings = Position::with(['candidates' => function($query) {
             $query->select('candidates.*')
-                  ->selectRaw('(
-                      SELECT COUNT(*)
+                  ->whereNotNull('first_name')  // Add null checks
+                  ->whereNotNull('last_name')
+                  ->whereHas('partylist')
+                  ->whereHas('college')
+                  ->selectRaw('candidates.*, (
+                      SELECT COALESCE(COUNT(*), 0)
                       FROM casted_votes
                       WHERE casted_votes.candidate_id = candidates.candidate_id
                       AND casted_votes.position_id = candidates.position_id
@@ -24,7 +28,9 @@ class RankingsController extends Controller
         ->orderBy('position_order')
         ->get()
         ->mapWithKeys(function ($position) {
-            return [$position->name => $position->candidates];
+            return [$position->name => $position->candidates->filter(function($candidate) {
+                return $candidate->first_name && $candidate->last_name && $candidate->partylist && $candidate->college;
+            })];
         });
 
         return view('rankings.index', compact('rankings'));

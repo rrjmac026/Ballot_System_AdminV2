@@ -78,41 +78,43 @@ class DashboardController extends Controller
             'todayEmails' => EmailLog::whereDate('created_at', today())->count()
         ];
 
-        // Get presidential rankings
-        $data['presidentialRankings'] = Candidate::where('position_id', 1)
+        // Get presidential rankings with better null checks
+        $data['presidentialRankings'] = Candidate::with(['partylist', 'college'])
+            ->where('position_id', 1)
+            ->whereNotNull('first_name')
+            ->whereNotNull('last_name')
             ->select('candidates.*')
-            ->selectRaw('(
+            ->selectRaw('COALESCE((
                 SELECT COUNT(*)
                 FROM casted_votes
                 WHERE casted_votes.candidate_id = candidates.candidate_id
-                AND casted_votes.position_id = 1
-            ) as casted_votes_count')
-            ->with(['partylist', 'college'])
+                AND casted_votes.position_id = candidates.position_id
+            ), 0) as casted_votes_count')
             ->orderByDesc('casted_votes_count')
             ->limit(3)
-            ->get();
+            ->get()
+            ->filter(function($candidate) {
+                return $candidate && $candidate->partylist && $candidate->college;
+            });
 
-        // Add vice presidential rankings
-        $vicePresidentialPosition = Position::where('name', 'like', '%vice president%')
-            ->orWhere('name', 'like', '%Vice President%')
-            ->first();
-
-        if ($vicePresidentialPosition) {
-            $data['vicePresidentialRankings'] = Candidate::where('position_id', $vicePresidentialPosition->position_id)
-                ->select('candidates.*')
-                ->selectRaw('(
-                    SELECT COUNT(*)
-                    FROM casted_votes
-                    WHERE casted_votes.candidate_id = candidates.candidate_id
-                    AND casted_votes.position_id = ?
-                ) as casted_votes_count', [$vicePresidentialPosition->position_id])
-                ->with(['partylist', 'college'])
-                ->orderByDesc('casted_votes_count')
-                ->limit(3)
-                ->get();
-        } else {
-            $data['vicePresidentialRankings'] = collect();
-        }
+        // Vice presidential rankings with same null checks
+        $data['vicePresidentialRankings'] = Candidate::with(['partylist', 'college'])
+            ->where('position_id', 2)
+            ->whereNotNull('first_name')
+            ->whereNotNull('last_name')
+            ->select('candidates.*')
+            ->selectRaw('COALESCE((
+                SELECT COUNT(*)
+                FROM casted_votes
+                WHERE casted_votes.candidate_id = candidates.candidate_id
+                AND casted_votes.position_id = candidates.position_id
+            ), 0) as casted_votes_count')
+            ->orderByDesc('casted_votes_count')
+            ->limit(3)
+            ->get()
+            ->filter(function($candidate) {
+                return $candidate && $candidate->partylist && $candidate->college;
+            });
 
         return view('dashboard', $data);
     }

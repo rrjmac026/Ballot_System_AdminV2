@@ -22,9 +22,29 @@ class VoterController extends Controller
         'College of Education' => 'COE'
     ];
 
-    public function index()
+    public function index(Request $request)
     {
-        $voters = Voter::with('college')->get();
+        $search = $request->get('search');
+        
+        $voters = Voter::with('college')
+            ->when($search, function($query) use ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('student_number', 'like', '%' . $search . '%')
+                      ->orWhere('course', 'like', '%' . $search . '%')
+                      ->orWhereHas('college', function($q) use ($search) {
+                          $q->where('name', 'like', '%' . $search . '%');
+                      });
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString(); // Add this to maintain search parameter in pagination links
+
+        if($request->ajax()) {
+            return view('voters.partials._table', compact('voters'));
+        }
+
         return view('voters.index', compact('voters'));
     }
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('transaction_number');
             $table->foreignId('voter_id');
             $table->foreignId('position_id');
-            $table->foreignId('candidate_id');
+            $table->foreignId('candidate_id')->nullable();
             $table->string('vote_hash');
             $table->timestamp('voted_at');
             $table->string('ip_address')->nullable();
