@@ -65,4 +65,14 @@ class Voter extends Authenticatable
     {
         return $this->hasMany(CastedVote::class, 'voter_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Add cascading delete for related casted votes
+        static::deleting(function ($voter) {
+            $voter->castedVotes()->delete();
+        });
+    }
 }
