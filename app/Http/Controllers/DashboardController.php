@@ -26,11 +26,11 @@ class DashboardController extends Controller
             'collegesCount' => College::count(),
             'organizationsCount' => Organization::count(),
             'partylistsCount' => Partylist::count(),
-            'castedVotesCount' => CastedVote::count(),
-            'usersCount' => \App\Models\User::count() // Add this line
+            'castedVotesCount' => CastedVote::distinct('voter_id')->count(), // Changed to count unique voters
+            'usersCount' => \App\Models\User::count()
         ];
 
-        // Voting statistics
+        // Voting statistics - also based on unique voters
         $data['votingStats'] = [
             'totalEligibleVoters' => Voter::where('status', 'Active')->count(),
             'totalVoted' => CastedVote::distinct('voter_id')->count(),

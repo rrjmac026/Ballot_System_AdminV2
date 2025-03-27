@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Position;
 use App\Models\College;
 use App\Models\CastedVote;
+use App\Models\Voter;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -12,15 +13,33 @@ class ReportController extends Controller
 {
     public function index()
     {
+        $colleges = College::select('name', 'acronym')->get();
         $data = $this->getReportData();
+        $data['colleges'] = $colleges;
         return view('reports.index', $data);
     }
 
-    public function generatePDF()
+    public function generatePDF(Request $request)
     {
-        $data = $this->getReportData();
-        $pdf = PDF::loadView('reports.pdf', $data);
-        return $pdf->download('election_results_' . now()->format('Y-m-d') . '.pdf');
+        $type = $request->type ?? 'all';
+        $college = $request->college;
+        
+        if ($type === 'ssc') {
+            $data = $this->getSSCReportData();
+            $view = 'reports.pdf-ssc';
+            $filename = 'ssc_election_results';
+        } elseif ($type === 'sbo') {
+            $data = $this->getSBOReportData($college);
+            $view = 'reports.pdf-sbo';
+            $filename = strtolower($college) . '_election_results';
+        } else {
+            $data = $this->getReportData();
+            $view = 'reports.pdf';
+            $filename = 'election_results';
+        }
+
+        $pdf = PDF::loadView($view, $data);
+        return $pdf->download($filename . '_' . now()->format('Y-m-d') . '.pdf');
     }
 
     private function getReportData()
@@ -62,6 +81,68 @@ class ReportController extends Controller
             'collegeStats' => $collegeStats,
             'totalVoters' => \App\Models\Voter::where('status', 'Active')->count(),
             'totalVoted' => CastedVote::distinct('voter_id')->count(),
+            'generatedAt' => now()->format('F j, Y h:i A')
+        ];
+    }
+
+    private function getSSCReportData()
+    {
+        // Get SSC positions (President, VP, Senators)
+        $positions = Position::whereIn('position_id', [1, 2, 3])
+            ->with(['candidates' => function($query) {
+                $query->select('candidates.*')
+                    ->selectRaw('(
+                        SELECT COUNT(*)
+                        FROM casted_votes
+                        WHERE casted_votes.candidate_id = candidates.candidate_id
+                        AND casted_votes.position_id = candidates.position_id
+                    ) as vote_count')
+                    ->with(['partylist', 'college'])
+                    ->orderByDesc('vote_count');
+            }])->orderBy('position_order')->get();
+
+        return [
+            'positions' => $positions,
+            'totalVoters' => \App\Models\Voter::where('status', 'Active')->count(),
+            'totalVoted' => CastedVote::distinct('voter_id')->count(),
+            'generatedAt' => now()->format('F j, Y h:i A')
+        ];
+    }
+
+    private function getSBOReportData($college)
+    {
+        // Get college info
+        $collegeInfo = College::where('acronym', $college)->firstOrFail();
+
+        // Get SBO positions (4-14: Governor to Representatives)
+        $positions = Position::whereIn('position_id', range(4, 14))
+            ->with(['candidates' => function($query) use ($collegeInfo) {
+                $query->where('college_id', $collegeInfo->college_id)
+                    ->selectRaw('candidates.*, (
+                        SELECT COUNT(*)
+                        FROM casted_votes
+                        WHERE casted_votes.candidate_id = candidates.candidate_id
+                        AND casted_votes.position_id = candidates.position_id
+                    ) as vote_count')
+                    ->with(['partylist', 'college'])
+                    ->orderByDesc('vote_count');
+            }])
+            ->get()
+            ->filter(function($position) {
+                return $position->candidates->isNotEmpty();
+            });
+
+        // Get voters from this college
+        $collegeVoters = Voter::where('college_id', $collegeInfo->college_id)
+            ->where('status', 'Active');
+
+        return [
+            'college' => $collegeInfo,
+            'positions' => $positions,
+            'totalVoters' => $collegeVoters->count(),
+            'totalVoted' => CastedVote::whereIn('voter_id', $collegeVoters->pluck('voter_id'))
+                ->distinct('voter_id')
+                ->count(),
             'generatedAt' => now()->format('F j, Y h:i A')
         ];
     }

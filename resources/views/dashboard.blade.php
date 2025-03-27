@@ -28,7 +28,7 @@
                     <i class="fas fa-vote-yea text-green-500 text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-gray-500 dark:text-gray-400 text-sm">Cast Votes</h3>
+                    <h3 class="text-gray-500 dark:text-gray-400 text-sm">Voters Who Cast</h3>
                     <div class="flex items-center">
                         <p class="text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $castedVotesCount }}</p>
                         <span class="ml-2 text-sm text-blue-500">{{ $votingStats['votingPercentage'] }}% turnout</span>
@@ -204,7 +204,7 @@
     </div>
 
     <!-- Voting Information Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <!-- <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Voting Information</h4>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -236,6 +236,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
 </div>
 @endsection
