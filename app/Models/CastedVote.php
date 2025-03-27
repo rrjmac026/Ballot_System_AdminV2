@@ -48,7 +48,7 @@ class CastedVote extends Model
 
     public function candidate()
     {
-        return $this->belongsTo(Candidate::class, 'candidate_id');
+        return $this->belongsTo(Candidate::class, 'candidate_id', 'candidate_id');
     }
 
     public function position()

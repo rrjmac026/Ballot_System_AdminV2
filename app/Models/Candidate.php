@@ -57,7 +57,7 @@ class Candidate extends Model
 
     public function castedVotes()
     {
-        return $this->hasMany(CastedVote::class);
+        return $this->hasMany(CastedVote::class, 'candidate_id', 'candidate_id');
     }
 
     public function getCastedVotesCountAttribute()
@@ -81,6 +81,8 @@ class Candidate extends Model
 
     public function getVoteCountAttribute()
     {
-        return $this->getCastedVotesCountAttribute();
+        return $this->castedVotes()
+            ->where('position_id', $this->position_id)
+            ->count();
     }
 }
