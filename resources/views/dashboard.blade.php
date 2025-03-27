@@ -191,6 +191,11 @@
                             {{ $vote->voter->college->name }} - Year {{ $vote->voter->year_level }}
                             <span class="ml-2">{{ $vote->voted_at->diffForHumans() }}</span>
                         </p>
+                        <div class="mt-1 text-xs text-gray-500">
+                            @foreach($recentVotesDetails[$vote->transaction_number] as $detail)
+                                <span class="inline-block mr-2">{{ $detail->position->name }}: {{ $detail->candidate->first_name }}</span>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 @endforeach

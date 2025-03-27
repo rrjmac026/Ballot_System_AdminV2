@@ -11,6 +11,7 @@ use App\Models\Partylist;
 use App\Models\CastedVote;
 use App\Models\EmailLog;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -38,29 +39,33 @@ class DashboardController extends Controller
 
         // Recent voting activity - modified to show unique transactions
         $data['recentVotes'] = CastedVote::with(['voter.college'])
-            ->select('transaction_number', 'voter_id', 'voted_at', 'votes')
-            ->distinct('transaction_number')
-            ->latest('voted_at')
-            ->take(5)
+            ->select('transaction_number', 'voter_id', 'voted_at')
+            ->groupBy('transaction_number', 'voter_id', 'voted_at')
+            ->orderByDesc('voted_at')
+            ->limit(5)
             ->get();
 
-        $data['votingData'] = CastedVote::with(['voter.college'])
-            ->select('transaction_number', 'voter_id', 'voted_at', 'votes')
+        $data['recentVotesDetails'] = CastedVote::with(['position', 'candidate'])
+            ->whereIn('transaction_number', $data['recentVotes']->pluck('transaction_number'))
+            ->get()
+            ->groupBy('transaction_number');
+
+        $data['votingData'] = CastedVote::with(['voter.college', 'candidate', 'position'])
+            ->select('transaction_number', 'voter_id', 'voted_at', 'position_id', 'candidate_id')
             ->distinct('transaction_number')
             ->latest('voted_at')
             ->get()
-            ->each(function($vote) {
-                $vote->voting_details = collect($vote->votes)->map(function($candidateId, $positionId) {
-                    $position = Position::find($positionId);
-                    $candidate = Candidate::find($candidateId);
-                    if ($position && $candidate) {
-                        return [
-                            'position' => $position,
-                            'candidate' => $candidate
-                        ];
-                    }
-                })->filter();
-            });
+            ->groupBy('transaction_number')
+            ->map(function($votes) {
+                $first = $votes->first();
+                $first->voting_details = $votes->map(function($vote) {
+                    return [
+                        'position' => $vote->position,
+                        'candidate' => $vote->candidate
+                    ];
+                });
+                return $first;
+            })->values();
 
         // Voting progress by college
         $data['collegeProgress'] = $this->getCollegeVotingProgress();
@@ -74,20 +79,18 @@ class DashboardController extends Controller
         ];
 
         // Get presidential rankings
-        $presidentialPosition = Position::where('name', 'like', '%president%')
-            ->orWhere('name', 'like', '%President%')
-            ->first();
-
-        if ($presidentialPosition) {
-            $data['presidentialRankings'] = Candidate::where('position_id', $presidentialPosition->position_id)
-                ->withCount(['castedVotes'])
-                ->orderByDesc('casted_votes_count')
-                ->with(['partylist', 'college'])
-                ->take(3)
-                ->get();
-        } else {
-            $data['presidentialRankings'] = collect();
-        }
+        $data['presidentialRankings'] = Candidate::where('position_id', 1)
+            ->select('candidates.*')
+            ->selectRaw('(
+                SELECT COUNT(*)
+                FROM casted_votes
+                WHERE casted_votes.candidate_id = candidates.candidate_id
+                AND casted_votes.position_id = 1
+            ) as casted_votes_count')
+            ->with(['partylist', 'college'])
+            ->orderByDesc('casted_votes_count')
+            ->limit(3)
+            ->get();
 
         // Add vice presidential rankings
         $vicePresidentialPosition = Position::where('name', 'like', '%vice president%')
@@ -96,10 +99,16 @@ class DashboardController extends Controller
 
         if ($vicePresidentialPosition) {
             $data['vicePresidentialRankings'] = Candidate::where('position_id', $vicePresidentialPosition->position_id)
-                ->withCount(['castedVotes'])
-                ->orderByDesc('casted_votes_count')
+                ->select('candidates.*')
+                ->selectRaw('(
+                    SELECT COUNT(*)
+                    FROM casted_votes
+                    WHERE casted_votes.candidate_id = candidates.candidate_id
+                    AND casted_votes.position_id = ?
+                ) as casted_votes_count', [$vicePresidentialPosition->position_id])
                 ->with(['partylist', 'college'])
-                ->take(3)
+                ->orderByDesc('casted_votes_count')
+                ->limit(3)
                 ->get();
         } else {
             $data['vicePresidentialRankings'] = collect();

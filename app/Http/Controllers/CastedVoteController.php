@@ -16,31 +16,19 @@ class CastedVoteController extends Controller
 {
     public function index()
     {
-        $castedVotes = CastedVote::with(['voter.college'])
-            ->select(['transaction_number', 'voter_id', 'voted_at', 'votes'])
-            ->distinct('transaction_number')
-            ->latest('voted_at')
+        $castedVotes = CastedVote::with(['voter.college', 'position', 'candidate'])
+            ->select('transaction_number', 'voter_id', 'voted_at')
+            ->groupBy('transaction_number', 'voter_id', 'voted_at')
+            ->orderByDesc('voted_at')
             ->paginate(15);
 
-        $votingDetails = [];
-        foreach ($castedVotes as $vote) {
-            $details = [];
-            if (is_array($vote->votes)) {
-                foreach ($vote->votes as $positionId => $candidateId) {
-                    $candidate = Candidate::find($candidateId);
-                    $position = Position::find($positionId);
-                    if ($candidate && $position) {
-                        $details[] = [
-                            'position' => $position,
-                            'candidate' => $candidate
-                        ];
-                    }
-                }
-            }
-            $votingDetails[$vote->transaction_number] = $details;
-        }
+        // Get all votes for each transaction
+        $votingDetails = CastedVote::with(['position', 'candidate.partylist'])
+            ->whereIn('transaction_number', $castedVotes->pluck('transaction_number'))
+            ->get()
+            ->groupBy('transaction_number');
 
-        return view('casted_votes.index', compact('castedVotes', 'votingDetails'));
+        return view('admin.casted_votes.index', compact('castedVotes', 'votingDetails'));
     }
 
     public function create()
@@ -87,28 +75,21 @@ class CastedVoteController extends Controller
         }
     }
 
-    public function show($transaction_number)
+    public function show($transactionNumber)
     {
-        $transaction = CastedVote::where('transaction_number', $transaction_number)
-            ->with(['voter.college'])
-            ->firstOrFail();
+        $votes = CastedVote::with(['voter.college', 'position', 'candidate'])
+            ->where('transaction_number', $transactionNumber)
+            ->get();
 
-        $votingDetails = [];
-        if (is_array($transaction->votes)) {
-            foreach ($transaction->votes as $positionId => $candidateId) {
-                $position = Position::find($positionId);
-                $candidate = Candidate::with('partylist')->find($candidateId);
-                if ($position && $candidate) {
-                    $votingDetails[] = [
-                        'position' => $position->name,
-                        'candidate_name' => $candidate->first_name . ' ' . $candidate->last_name,
-                        'partylist' => $candidate->partylist ? $candidate->partylist->name : 'N/A'
-                    ];
-                }
-            }
+        if ($votes->isEmpty()) {
+            abort(404);
         }
 
-        return view('casted_votes.show', compact('transaction', 'votingDetails'));
+        return view('admin.casted_votes.show', [
+            'transaction_number' => $transactionNumber,
+            'votes' => $votes,
+            'voter' => $votes->first()->voter
+        ]);
     }
 
     public function edit(CastedVote $castedVote)

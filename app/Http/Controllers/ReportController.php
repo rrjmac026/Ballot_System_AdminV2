@@ -2,65 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use PDF;
-use App\Models\CastedVote;
 use App\Models\Position;
-use App\Models\Organization;
+use App\Models\College;
+use App\Models\CastedVote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ReportController extends Controller
 {
     public function index()
     {
-        $positions = Position::all();
-        $organizations = Organization::all();
-        
-        // Get vote counts by position
-        $positionResults = CastedVote::select('positions.name', DB::raw('COUNT(*) as vote_count'))
-            ->join('positions', 'casted_votes.position_id', '=', 'positions.position_id')
-            ->groupBy('positions.position_id', 'positions.name')
-            ->get();
-
-        // Get winning candidates by position
-        $winners = CastedVote::select(
-            'positions.name as position',
-            'candidates.first_name',
-            'candidates.last_name',
-            DB::raw('COUNT(*) as vote_count')
-        )
-            ->join('positions', 'casted_votes.position_id', '=', 'positions.position_id')
-            ->join('candidates', 'casted_votes.candidate_id', '=', 'candidates.candidate_id')
-            ->groupBy('positions.position_id', 'positions.name', 'candidates.candidate_id', 'candidates.first_name', 'candidates.last_name')
-            ->orderByRaw('positions.position_id, COUNT(*) DESC')
-            ->get();
-
-        return view('reports.index', compact('positionResults', 'winners', 'positions', 'organizations'));
+        $data = $this->getReportData();
+        return view('reports.index', $data);
     }
 
     public function generatePDF()
     {
-        $positions = Position::all();
-        
-        $positionResults = CastedVote::select('positions.name', DB::raw('COUNT(*) as vote_count'))
-            ->join('positions', 'casted_votes.position_id', '=', 'positions.position_id')
-            ->groupBy('positions.position_id', 'positions.name')
-            ->get();
+        $data = $this->getReportData();
+        $pdf = PDF::loadView('reports.pdf', $data);
+        return $pdf->download('election_results_' . now()->format('Y-m-d') . '.pdf');
+    }
 
-        $winners = CastedVote::select(
-            'positions.name as position',
-            'candidates.first_name',
-            'candidates.last_name',
-            DB::raw('COUNT(*) as vote_count')
-        )
-            ->join('positions', 'casted_votes.position_id', '=', 'positions.position_id')
-            ->join('candidates', 'casted_votes.candidate_id', '=', 'candidates.candidate_id')
-            ->groupBy('positions.position_id', 'positions.name', 'candidates.candidate_id', 'candidates.first_name', 'candidates.last_name')
-            ->orderByRaw('positions.position_id, COUNT(*) DESC')
-            ->get()
-            ->groupBy('position');
+    private function getReportData()
+    {
+        // Get positions with candidates and their vote counts
+        $positions = Position::with(['candidates' => function($query) {
+            $query->select('candidates.*')
+                ->selectRaw('(
+                    SELECT COUNT(*)
+                    FROM casted_votes
+                    WHERE casted_votes.candidate_id = candidates.candidate_id
+                    AND casted_votes.position_id = candidates.position_id
+                ) as vote_count')
+                ->with(['partylist', 'college'])
+                ->orderByDesc('vote_count');
+        }])->orderBy('position_order')->get();
 
-        $pdf = PDF::loadView('reports.pdf', compact('positionResults', 'winners'));
-        return $pdf->download('election_results.pdf');
+        // Get college voting statistics
+        $collegeStats = College::with(['voters' => function ($query) {
+            $query->where('status', 'Active');
+        }])
+        ->get()
+        ->map(function ($college) {
+            $totalVoters = $college->voters->count();
+            $votedCount = CastedVote::whereIn('voter_id', $college->voters->pluck('voter_id'))
+                ->distinct('voter_id')
+                ->count();
+            
+            return [
+                'name' => $college->name,
+                'totalVoters' => $totalVoters,
+                'votedCount' => $votedCount,
+                'percentage' => $totalVoters > 0 ? round(($votedCount / $totalVoters) * 100, 2) : 0
+            ];
+        });
+
+        return [
+            'positions' => $positions,
+            'collegeStats' => $collegeStats,
+            'totalVoters' => \App\Models\Voter::where('status', 'Active')->count(),
+            'totalVoted' => CastedVote::distinct('voter_id')->count(),
+            'generatedAt' => now()->format('F j, Y h:i A')
+        ];
     }
 }

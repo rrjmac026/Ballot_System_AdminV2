@@ -57,20 +57,30 @@ class Candidate extends Model
 
     public function castedVotes()
     {
-        return $this->hasMany(CastedVote::class, 'votes->' . $this->position_id, 'candidate_id')
-            ->whereRaw('JSON_CONTAINS(votes, ?, ?)', [
-                $this->candidate_id, 
-                '$."' . $this->position_id . '"'
-            ]);
+        return $this->hasMany(CastedVote::class);
     }
 
     public function getCastedVotesCountAttribute()
     {
-        return CastedVote::whereJsonContains('votes->' . $this->position_id, (string)$this->candidate_id)->count();
+        return DB::table('casted_votes')
+            ->where('candidate_id', $this->candidate_id)
+            ->where('position_id', $this->position_id)
+            ->count();
+    }
+
+    public function scopeWithVoteCount($query)
+    {
+        return $query->addSelect([
+            'casted_votes_count' => DB::raw("(
+                SELECT COUNT(*)
+                FROM casted_votes
+                WHERE JSON_EXTRACT(votes, CONCAT('$.', candidates.position_id)) = CAST(candidates.candidate_id AS CHAR)
+            )")
+        ]);
     }
 
     public function getVoteCountAttribute()
     {
-        return CastedVote::whereJsonContains('votes->' . $this->position_id, $this->candidate_id)->count();
+        return $this->getCastedVotesCountAttribute();
     }
 }
