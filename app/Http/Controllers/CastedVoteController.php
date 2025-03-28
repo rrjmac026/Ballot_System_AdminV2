@@ -28,7 +28,7 @@ class CastedVoteController extends Controller
             ->get()
             ->groupBy('transaction_number');
 
-        return view('admin.casted_votes.index', compact('castedVotes', 'votingDetails'));
+        return view('casted_votes.index', compact('castedVotes', 'votingDetails'));
     }
 
     public function create()
@@ -85,7 +85,7 @@ class CastedVoteController extends Controller
             abort(404);
         }
 
-        return view('admin.casted_votes.show', [
+        return view('casted_votes.show', [
             'transaction_number' => $transactionNumber,
             'votes' => $votes,
             'voter' => $votes->first()->voter
