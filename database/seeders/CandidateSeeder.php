@@ -93,6 +93,17 @@ class CandidateSeeder extends Seeder
             ['first_name' => 'Romeo', 'middle_name' => null, 'last_name' => 'Hortilano', 'position_id' => 14, 'partylist_id' => 3, 'college_id' => 2, 'course' => 'BSET', 'photo' => '1743011335_COT_4TH.jpg'],
             ['first_name' => 'Peter Victor', 'middle_name' => null, 'last_name' => 'Dawis', 'position_id' => 13, 'partylist_id' => 3, 'college_id' => 2, 'course' => 'BSIT', 'photo' => '1743011104_COT_3RD.jpg'],
             ['first_name' => 'Carlitos Mari', 'middle_name' => null, 'last_name' => 'Simene', 'position_id' => 12, 'partylist_id' => 3, 'college_id' => 2, 'course' => 'BSIT', 'photo' => '1743011308_COT_2ND.jpg'],
+            
+            //CPAG-SBO (HIRAYA PARTYLSIT) 
+            ['first_name' => 'Pryncz Luejay', 'middle_name' => 'C.', 'last_name' => 'Senagonia', 'position_id' => 4, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241035_HIRAYA PARTYLIST (6).jpg'],
+            ['first_name' => 'Mery Grace', 'middle_name' => 'S.', 'last_name' => 'Caresosa', 'position_id' => 5, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241068_HIRAYA PARTYLIST (5).jpg'],
+            ['first_name' => 'Faith', 'middle_name' => null, 'last_name' => 'Lozarita', 'position_id' => 6, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241092_HIRAYA PARTYLIST (1).jpg'],
+            ['first_name' => 'Johayra', 'middle_name' => 'C.', 'last_name' => 'Hadji Rasul', 'position_id' => 7, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241110_HIRAYA PARTYLIST (2).jpg'],
+            ['first_name' => 'September Star', 'middle_name' => 'S.', 'last_name' => 'Padla', 'position_id' => 8, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241130_HIRAYA PARTYLIST (8).jpg'],
+            ['first_name' => 'Aljun', 'middle_name' => 'N.E.', 'last_name' => 'Andulana', 'position_id' => 9, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241145_HIRAYA PARTYLIST.jpg'],
+            ['first_name' => 'Chieky', 'middle_name' => 'G.', 'last_name' => 'Dahao', 'position_id' => 10, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241160_HIRAYA PARTYLIST (3).jpg'],
+            ['first_name' => 'Anigen', 'middle_name' => 'L.', 'last_name' => 'Catubig', 'position_id' => 11, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241177_HIRAYA PARTYLIST (4).jpg'],
+            ['first_name' => 'Remond', 'middle_name' => 'L.', 'last_name' => 'Gayloa', 'position_id' => 13, 'partylist_id' => 3, 'college_id' => 4, 'course' => 'BPA', 'photo' => '1743241191_HIRAYA PARTYLIST (7).jpg'],
 
         ];
 
