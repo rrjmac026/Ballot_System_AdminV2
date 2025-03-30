@@ -9,7 +9,29 @@
     </div>
 
     <!-- Report Type Selection -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <!-- All Results Card -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 rounded-2xl shadow-lg p-8 border border-green-200 dark:border-green-700">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="p-3 bg-green-600 rounded-lg text-white">
+                    <i class="fas fa-file-alt text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-green-900 dark:text-green-100">Complete Election Results</h3>
+                    <p class="text-green-700 dark:text-green-300 text-sm">All positions and colleges</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">Generate a comprehensive report containing all election results across all positions and colleges.</p>
+            <form action="{{ route('reports.generate') }}" method="POST" class="inline">
+                @csrf
+                <input type="hidden" name="type" value="all">
+                <button type="submit" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 shadow-md hover:shadow-lg">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Complete Results
+                </button>
+            </form>
+        </div>
+
         <!-- SSC Report Card -->
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 rounded-2xl shadow-lg p-8 border border-blue-200 dark:border-blue-700">
             <div class="flex items-center gap-4 mb-6">
