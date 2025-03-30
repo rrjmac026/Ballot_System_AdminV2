@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Position;
-use App\Models\CastedVote;
 use App\Models\Candidate;
 use Illuminate\Support\Facades\DB;
 
@@ -11,20 +10,29 @@ class RankingsController extends Controller
 {
     public function index()
     {
-        $positionRankings = Position::with(['candidates'])
-            ->get()
-            ->map(function ($position) {
-                $candidateVotes = Candidate::where('position_id', $position->position_id)
-                    ->withCount(['castedVotes'])
-                    ->orderByDesc('casted_votes_count')
-                    ->get();
+        $rankings = Position::with(['candidates' => function($query) {
+            $query->select('candidates.*')
+                  ->whereNotNull('first_name')  // Add null checks
+                  ->whereNotNull('last_name')
+                  ->whereHas('partylist')
+                  ->whereHas('college')
+                  ->selectRaw('candidates.*, (
+                      SELECT COALESCE(COUNT(*), 0)
+                      FROM casted_votes
+                      WHERE casted_votes.candidate_id = candidates.candidate_id
+                      AND casted_votes.position_id = candidates.position_id
+                  ) as vote_count')
+                  ->with(['partylist', 'college'])
+                  ->orderByDesc('vote_count');
+        }])
+        ->orderBy('position_order')
+        ->get()
+        ->mapWithKeys(function ($position) {
+            return [$position->name => $position->candidates->filter(function($candidate) {
+                return $candidate->first_name && $candidate->last_name && $candidate->partylist && $candidate->college;
+            })];
+        });
 
-                return [
-                    'position' => $position,
-                    'candidates' => $candidateVotes
-                ];
-            });
-
-        return view('rankings.index', compact('positionRankings'));
+        return view('rankings.index', compact('rankings'));
     }
 }

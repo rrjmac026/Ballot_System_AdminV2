@@ -9,13 +9,26 @@ use App\Models\Position;
 use App\Http\Requests\StoreCastedVoteRequest;
 use App\Http\Requests\UpdateCastedVoteRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CastedVoteController extends Controller
 {
     public function index()
     {
-        $castedVotes = CastedVote::with(['voter', 'candidate', 'position'])->get();
-        return view('casted_votes.index', compact('castedVotes'));
+        $castedVotes = CastedVote::with(['voter.college', 'position', 'candidate'])
+            ->select('transaction_number', 'voter_id', 'voted_at')
+            ->groupBy('transaction_number', 'voter_id', 'voted_at')
+            ->orderByDesc('voted_at')
+            ->paginate(15);
+
+        // Get all votes for each transaction
+        $votingDetails = CastedVote::with(['position', 'candidate.partylist'])
+            ->whereIn('transaction_number', $castedVotes->pluck('transaction_number'))
+            ->get()
+            ->groupBy('transaction_number');
+
+        return view('casted_votes.index', compact('castedVotes', 'votingDetails'));
     }
 
     public function create()
@@ -29,32 +42,54 @@ class CastedVoteController extends Controller
     public function store(StoreCastedVoteRequest $request)
     {
         try {
-            $voteHash = CastedVote::hashVote($request->candidate_id);
+            DB::beginTransaction();
             
-            $castedVote = CastedVote::create([
-                'voter_id' => $request->voter_id,
-                'position_id' => $request->position_id,
-                'candidate_id' => $request->candidate_id, // Add this line
-                'vote_hash' => $voteHash,
-                'voted_at' => now()
-            ]);
-
-            return redirect()->route('casted_votes.index')
-                ->with('success', 'Vote recorded successfully.');
+            // Generate single transaction number for all votes
+            $transactionNumber = 'TXN-' . date('Ymd') . '-' . strtoupper(Str::random(6));
+            
+            // Process each position-candidate pair
+            foreach ($request->votes as $vote) {
+                $voteHash = CastedVote::hashVote($vote['candidate_id']);
                 
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->getCode() == 23000) { // Integrity constraint violation
-                return redirect()->back()
-                    ->withErrors(['error' => 'This voter has already cast a vote for this position.'])
-                    ->withInput();
+                CastedVote::create([
+                    'transaction_number' => $transactionNumber,
+                    'voter_id' => $request->voter_id,
+                    'position_id' => $vote['position_id'],
+                    'candidate_id' => $vote['candidate_id'],
+                    'vote_hash' => $voteHash,
+                    'voted_at' => now(),
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ]);
             }
-            throw $e;
+            
+            DB::commit();
+            return redirect()->route('casted_votes.index')
+                ->with('success', 'All votes recorded successfully.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withErrors(['error' => 'An error occurred while recording your votes.'])
+                ->withInput();
         }
     }
 
-    public function show(CastedVote $castedVote)
+    public function show($transactionNumber)
     {
-        return view('casted_votes.show', compact('castedVote'));
+        $votes = CastedVote::with(['voter.college', 'position', 'candidate'])
+            ->where('transaction_number', $transactionNumber)
+            ->get();
+
+        if ($votes->isEmpty()) {
+            abort(404);
+        }
+
+        return view('casted_votes.show', [
+            'transaction_number' => $transactionNumber,
+            'votes' => $votes,
+            'voter' => $votes->first()->voter
+        ]);
     }
 
     public function edit(CastedVote $castedVote)

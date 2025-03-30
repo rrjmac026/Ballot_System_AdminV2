@@ -39,6 +39,12 @@
                             <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $voter->email }}</dd>
                         </div>
                         <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Sex</dt>
+                            <dd class="mt-1 text-gray-900 dark:text-gray-100">
+                                {{ $voter->sex === 'M' ? 'Male' : 'Female' }}
+                            </dd>
+                        </div>
+                        <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
                             <dd class="mt-1">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $voter->status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">

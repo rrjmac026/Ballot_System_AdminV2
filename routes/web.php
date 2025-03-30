@@ -16,7 +16,6 @@ use App\Http\Controllers\EmailLogController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\MaintenanceController;
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,12 +32,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('voters', VoterController::class);
     Route::resource('casted_votes', CastedVoteController::class);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('/reports/generate', [ReportController::class, 'generatePDF'])->name('reports.generate');
     Route::get('/reports/pdf', [ReportController::class, 'generatePDF'])->name('reports.pdf');
     Route::get('/rankings', [RankingsController::class, 'index'])->name('rankings.index');
-    Route::post('/voters/{voter}/reset-passkey', [VoterController::class, 'resetPasskey'])->name('voters.reset-passkey');
+
+    Route::resource('voting-records', VotingRecordController::class)->only(['index', 'show']);
+    
     Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
     Route::post('/maintenance/toggle', [MaintenanceController::class, 'toggle'])->name('maintenance.toggle');
     Route::post('/maintenance/message', [MaintenanceController::class, 'updateMessage'])->name('maintenance.message');
+    Route::get('casted_votes/{transaction_number}', [CastedVoteController::class, 'show'])->name('casted_votes.show');
+    Route::post('/candidates/bulk-delete', [CandidateController::class, 'bulkDelete'])->name('candidates.bulk-delete');
 });
 
 // Profile routes

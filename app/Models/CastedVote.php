@@ -16,22 +16,29 @@ class CastedVote extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
+        'transaction_number',
         'voter_id',
         'position_id',
         'candidate_id',
         'vote_hash',
-        'voted_at'
+        'voted_at',
+        'ip_address',
+        'user_agent'
     ];
-
-    protected $dates = ['voted_at'];
 
     protected $casts = [
-        'voted_at' => 'datetime'
+        'voted_at' => 'datetime',
     ];
 
-    public static function hashVote($candidate_id)
+    protected $dates = [
+        'voted_at',
+        'created_at',
+        'updated_at'
+    ];
+
+    public static function hashVote($candidateId)
     {
-        return Hash::make($candidate_id . env('APP_KEY'));
+        return Hash::make($candidateId . env('APP_KEY'));
     }
 
     public function voter()
@@ -41,7 +48,7 @@ class CastedVote extends Model
 
     public function candidate()
     {
-        return $this->belongsTo(Candidate::class, 'candidate_id');
+        return $this->belongsTo(Candidate::class, 'candidate_id', 'candidate_id');
     }
 
     public function position()

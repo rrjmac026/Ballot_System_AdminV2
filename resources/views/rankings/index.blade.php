@@ -1,50 +1,59 @@
 @extends('layouts.app')
 @section('content')
 <div class="container mx-auto px-6 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Election Rankings</h2>
-            <p class="text-gray-600 dark:text-gray-400 mt-1">Current standing of candidates per position</p>
-        </div>
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Election Rankings</h2>
+        <p class="text-gray-600 dark:text-gray-400 mt-1">Current standings for all positions</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        @foreach($positionRankings as $ranking)
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-            <div class="p-4 bg-blue-50 dark:bg-blue-900/20">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                    {{ $ranking['position']->name }}
-                </h3>
-            </div>
-            <div class="p-4">
-                @foreach($ranking['candidates'] as $index => $candidate)
-                <div class="mb-4 last:mb-0">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center">
-                            <span class="w-8 h-8 rounded-full bg-{{ $index === 0 ? 'yellow' : 'gray' }}-100 dark:bg-{{ $index === 0 ? 'yellow' : 'gray' }}-800 flex items-center justify-center text-{{ $index === 0 ? 'yellow' : 'gray' }}-800 dark:text-{{ $index === 0 ? 'yellow' : 'gray' }}-200 font-bold">
-                                #{{ $index + 1 }}
-                            </span>
-                            <span class="ml-3 text-gray-700 dark:text-gray-300">
-                                {{ $candidate->first_name }} {{ $candidate->last_name }}
-                            </span>
-                        </div>
-                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
-                            {{ $candidate->casted_votes_count }} votes
-                        </span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        @php
-                            $percentage = $ranking['candidates']->first()->casted_votes_count > 0
-                                ? ($candidate->casted_votes_count / $ranking['candidates']->first()->casted_votes_count) * 100
-                                : 0;
-                        @endphp
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $percentage }}%"></div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
+    @if($rankings->isEmpty())
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <p class="text-gray-600 dark:text-gray-400 text-center">No rankings available at the moment.</p>
         </div>
-        @endforeach
-    </div>
+    @else
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @foreach($rankings as $position => $candidates)
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ $position }}</h3>
+                    
+                    @if($candidates->isEmpty())
+                        <p class="text-gray-600 dark:text-gray-400 text-center">No candidates for this position.</p>
+                    @else
+                        @foreach($candidates as $index => $candidate)
+                        <div class="flex items-center mb-4 last:mb-0">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-{{ $index === 0 ? 'yellow' : 'gray' }}-100 dark:bg-{{ $index === 0 ? 'yellow' : 'gray' }}-800 flex items-center justify-center">
+                                    <span class="text-{{ $index === 0 ? 'yellow' : 'gray' }}-800 dark:text-{{ $index === 0 ? 'yellow' : 'gray' }}-200 font-bold">#{{ $index + 1 }}</span>
+                                </div>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            {{ $candidate->first_name }} {{ $candidate->last_name }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            {{ $candidate->partylist->acronym }} - {{ $candidate->college->acronym }}
+                                        </p>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                                        {{ $candidate->vote_count }} votes
+                                    </span>
+                                </div>
+                                <div class="mt-2 w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                                    @php
+                                        $maxVotes = $candidates->first()->vote_count;
+                                        $percentage = $maxVotes > 0 ? ($candidate->vote_count / $maxVotes) * 100 : 0;
+                                    @endphp
+                                    <div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ $percentage }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @endif
 </div>
 @endsection
