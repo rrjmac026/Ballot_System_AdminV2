@@ -11,17 +11,18 @@ return new class extends Migration
         Schema::create('voters', function (Blueprint $table) {
             $table->bigIncrements('voter_id');
             $table->string('name');
+            $table->enum('sex', ['M', 'F']);
             $table->string('student_number')->unique();
             $table->string('email')->unique();
-            $table->unsignedBigInteger('college_id')->index(); // Indexed for performance
+            $table->string('google_id')->nullable();
+            $table->unsignedBigInteger('college_id');
             $table->string('course');
             $table->integer('year_level');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
-            $table->string('passkey');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
-            $table->softDeletes(); // ✅ Soft delete for safer data handling
+            $table->softDeletes();
 
             $table->foreign('college_id')
                   ->references('college_id')

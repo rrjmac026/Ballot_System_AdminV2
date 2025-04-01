@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->unsignedBigInteger('position_id');
-            $table->unsignedBigInteger('partylist_id');
+            $table->unsignedBigInteger('partylist_id')->nullable();
             $table->unsignedBigInteger('college_id');
             $table->string('course');
             $table->string('photo')->nullable();
@@ -35,6 +35,9 @@ return new class extends Migration
                   ->references('college_id')
                   ->on('colleges')
                   ->onDelete('cascade');
+
+            // Add unique constraint for candidate names
+            $table->unique(['first_name', 'middle_name', 'last_name'], 'unique_candidate_name');
         });
     }
 

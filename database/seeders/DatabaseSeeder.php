@@ -18,15 +18,34 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
             PartylistSeeder::class,
             MaintenanceSettingsSeeder::class,
+            OrganizationSeeder::class,
+            CandidateSeeder::class,
         ]);
 
-       //Admin Seeder anga ka
+        // Admin Seeders
         User::updateOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => '1901102366@student.buksu.edu.ph'],
             [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
+                'name' => 'Admin Jam Macalutas',
+                'password' => Hash::make('gwaposijam123'),
+                'role' => 'admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => '2101103309@student.buksu.edu.ph'],
+            [
+                'name' => 'Admin Khyle Amacna',
+                'password' => Hash::make('gwaposikhyle123'),
+                'role' => 'admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => '1901102046@student.buksu.edu.ph'],
+            [
+                'name' => 'Admin Kirk John',
+                'password' => Hash::make('gwaposikirk123'),
                 'role' => 'admin',
             ]
         );

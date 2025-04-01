@@ -14,22 +14,23 @@ class StoreCastedVoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'voter_id' => [
+            'voter_id' => 'required|exists:voters,voter_id',
+            'votes' => 'required|array',
+            'votes.*.position_id' => [
                 'required',
-                'exists:voters,voter_id',
-                // Prevent duplicate votes for same position
+                'exists:positions,position_id',
                 function ($attribute, $value, $fail) {
-                    $exists = \App\Models\CastedVote::where('voter_id', $value)
-                        ->where('position_id', $this->position_id)
+                    $index = explode('.', $attribute)[1];
+                    $exists = \App\Models\CastedVote::where('voter_id', $this->voter_id)
+                        ->where('position_id', $value)
                         ->exists();
                     
                     if ($exists) {
-                        $fail('This voter has already voted for this position.');
+                        $fail("You have already voted for this position.");
                     }
                 },
             ],
-            'position_id' => 'required|exists:positions,position_id',
-            'candidate_id' => 'required|exists:candidates,candidate_id',
+            'votes.*.candidate_id' => 'required|exists:candidates,candidate_id',
         ];
     }
 

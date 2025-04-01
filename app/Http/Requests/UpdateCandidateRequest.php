@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCandidateRequest extends FormRequest
 {
@@ -15,13 +16,22 @@ class UpdateCandidateRequest extends FormRequest
     {
         return [
             'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
-            'partylist_id' => 'nullable|exists:partylists,partylist_id',
-            'organization_id' => 'required|exists:organizations,organization_id',
-            'position_id' => 'required|exists:positions,position_id',
+            'last_name' => 'required|string|max:255',
+            'position_id' => [
+                'required',
+                'exists:positions,position_id',
+                Rule::unique('candidates')->where(function ($query) {
+                    return $query->where('first_name', $this->first_name)
+                                ->where('middle_name', $this->middle_name)
+                                ->where('last_name', $this->last_name);
+                })->ignore($this->candidate->candidate_id, 'candidate_id')
+            ],
+            'partylist_id' => 'required|exists:partylists,partylist_id',
             'college_id' => 'required|exists:colleges,college_id',
-            'course' => 'nullable|string|max:255',
+            'course' => 'required|string|max:255',
+            'platform' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 
@@ -34,6 +44,7 @@ class UpdateCandidateRequest extends FormRequest
             'position_id.required' => 'You must select a position.',
             'college_id.required' => 'You must select a college.',
             'partylist_id.exists' => 'Selected partylist does not exist.',
+            'position_id.unique' => 'This candidate is already running for a different position.',
         ];
     }
 }

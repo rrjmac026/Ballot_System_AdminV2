@@ -13,7 +13,7 @@
     </div>
 
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-        <form action="{{ route('candidates.update', $candidate) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('candidates.update', $candidate) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -22,7 +22,7 @@
                 <div class="md:col-span-2 flex flex-col items-center p-6 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="w-32 h-32 mb-4">
                         @if($candidate->photo)
-                            <img src="{{ asset('storage/candidates/' . $candidate->photo) }}" 
+                            <img src="{{ $candidate->photo_url }}" 
                                  alt="{{ $candidate->first_name }}'s photo" 
                                  class="w-full h-full object-cover rounded-lg">
                         @else

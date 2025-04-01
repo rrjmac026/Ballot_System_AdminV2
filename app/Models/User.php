@@ -31,10 +31,6 @@ class User extends Authenticatable
         return $this->role === self::ROLE_ADMIN;
     }
 
-    public function isStudent()
-    {
-        return $this->role === self::ROLE_STUDENT;
-    }
 
     public function isVoter()
     {

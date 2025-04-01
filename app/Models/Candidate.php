@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Candidate extends Model
 {
@@ -59,12 +60,29 @@ class Candidate extends Model
         return $this->hasMany(CastedVote::class, 'candidate_id', 'candidate_id');
     }
 
-    // Add this method for photo URL
-    public function getPhotoUrlAttribute()
+    public function getCastedVotesCountAttribute()
     {
-        if ($this->photo) {
-            return Storage::disk('public')->url('candidates/' . $this->photo);
-        }
-        return asset('images/default-avatar.png');
+        return DB::table('casted_votes')
+            ->where('candidate_id', $this->candidate_id)
+            ->where('position_id', $this->position_id)
+            ->count();
+    }
+
+    public function scopeWithVoteCount($query)
+    {
+        return $query->addSelect([
+            'casted_votes_count' => DB::raw("(
+                SELECT COUNT(*)
+                FROM casted_votes
+                WHERE JSON_EXTRACT(votes, CONCAT('$.', candidates.position_id)) = CAST(candidates.candidate_id AS CHAR)
+            )")
+        ]);
+    }
+
+    public function getVoteCountAttribute()
+    {
+        return $this->castedVotes()
+            ->where('position_id', $this->position_id)
+            ->count();
     }
 }

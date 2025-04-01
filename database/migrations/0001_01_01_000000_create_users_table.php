@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('role')->default('voters');
-            $table->string('student_number')->nullable()->unique(); // para nis voters
-            $table->string('passkey')->nullable(); // para nis voters
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,20 +10,21 @@ class Voter extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'voters';
+    protected $table      = 'voters';
     protected $primaryKey = 'voter_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing  = true;
+    protected $keyType    = 'int';
 
     protected $fillable = [
         'name',
+        'sex',
         'student_number',
         'email',
+        'google_id',
         'college_id',
         'course',
         'year_level',
         'status',
-        'passkey',
     ];
 
     protected $hidden = ['password', 'passkey']; // Removed 'raw_passkey' for security
@@ -34,7 +34,7 @@ class Voter extends Authenticatable
      */
     public function setPasskeyAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             $this->attributes['passkey'] = Hash::make($value);
         }
     }
@@ -63,5 +63,15 @@ class Voter extends Authenticatable
     public function castedVotes()
     {
         return $this->hasMany(CastedVote::class, 'voter_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Add cascading delete for related casted votes
+        static::deleting(function ($voter) {
+            $voter->castedVotes()->delete();
+        });
     }
 }
