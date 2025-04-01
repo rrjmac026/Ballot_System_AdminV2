@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,10 +10,10 @@ class Voter extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'voters';
+    protected $table      = 'voters';
     protected $primaryKey = 'voter_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing  = true;
+    protected $keyType    = 'int';
 
     protected $fillable = [
         'name',
@@ -35,7 +34,7 @@ class Voter extends Authenticatable
      */
     public function setPasskeyAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             $this->attributes['passkey'] = Hash::make($value);
         }
     }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\MaintenanceSetting;
@@ -10,10 +9,10 @@ class MaintenanceController extends Controller
     public function toggle()
     {
         $maintenanceMode = MaintenanceSetting::where('key', 'maintenance_mode')->first();
-        $currentStatus = $maintenanceMode->value === 'true';
-        
+        $currentStatus   = $maintenanceMode->value === 'true';
+
         $maintenanceMode->update([
-            'value' => $currentStatus ? 'false' : 'true'
+            'value' => $currentStatus ? 'false' : 'true',
         ]);
 
         $status = $currentStatus ? 'disabled' : 'enabled';
@@ -23,11 +22,11 @@ class MaintenanceController extends Controller
     public function updateMessage(Request $request)
     {
         $request->validate([
-            'message' => 'required|string|max:255'
+            'message' => 'required|string|max:255',
         ]);
 
         MaintenanceSetting::where('key', 'maintenance_message')->update([
-            'value' => $request->message
+            'value' => $request->message,
         ]);
 
         return back()->with('success', 'Maintenance message has been updated.');
