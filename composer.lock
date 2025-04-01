@@ -2279,16 +2279,16 @@
         },
         {
             "name": "nette/utils",
-            "version": "v4.0.5",
+            "version": "v4.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96"
+                "reference": "ce708655043c7050eb050df361c5e313cf708309"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
-                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
+                "url": "https://api.github.com/repos/nette/utils/zipball/ce708655043c7050eb050df361c5e313cf708309",
+                "reference": "ce708655043c7050eb050df361c5e313cf708309",
                 "shasum": ""
             },
             "require": {
@@ -2359,9 +2359,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v4.0.5"
+                "source": "https://github.com/nette/utils/tree/v4.0.6"
             },
-            "time": "2024-08-07T15:39:19+00:00"
+            "time": "2025-03-30T21:06:30+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -6784,16 +6784,16 @@
         },
         {
             "name": "pestphp/pest",
-            "version": "v3.7.5",
+            "version": "v3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "4969526ef2841118aa9d8b13ae2dad40f3d91492"
+                "reference": "42e1b9f17fc2b2036701f4b968158264bde542d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/4969526ef2841118aa9d8b13ae2dad40f3d91492",
-                "reference": "4969526ef2841118aa9d8b13ae2dad40f3d91492",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/42e1b9f17fc2b2036701f4b968158264bde542d4",
+                "reference": "42e1b9f17fc2b2036701f4b968158264bde542d4",
                 "shasum": ""
             },
             "require": {
@@ -6801,7 +6801,7 @@
                 "nunomaduro/collision": "^8.7.0",
                 "nunomaduro/termwind": "^2.3.0",
                 "pestphp/pest-plugin": "^3.0.0",
-                "pestphp/pest-plugin-arch": "^3.0.0",
+                "pestphp/pest-plugin-arch": "^3.1.0",
                 "pestphp/pest-plugin-mutate": "^3.0.5",
                 "php": "^8.2.0",
                 "phpunit/phpunit": "^11.5.15"
@@ -6880,7 +6880,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v3.7.5"
+                "source": "https://github.com/pestphp/pest/tree/v3.8.0"
             },
             "funding": [
                 {
@@ -6892,7 +6892,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-29T17:57:53+00:00"
+            "time": "2025-03-30T17:49:10+00:00"
         },
         {
             "name": "pestphp/pest-plugin",
