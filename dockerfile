@@ -10,10 +10,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    npm \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
@@ -33,8 +31,10 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . .
 
-# Install dependencies
-RUN composer install
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Install Node.js dependencies
 RUN npm install
 RUN npm run build
 
