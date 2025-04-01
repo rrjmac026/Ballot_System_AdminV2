@@ -1,20 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CollegeController;
-use App\Http\Controllers\PartylistController;
-use App\Http\Controllers\OrganizationController;
-use App\Http\Controllers\PositionController;
 use App\Http\Controllers\CandidateController;
-use App\Http\Controllers\VoterController;
 use App\Http\Controllers\CastedVoteController;
+use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\RankingsController;
 use App\Http\Controllers\EmailLogController;
-use App\Http\Controllers\VoteController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PartylistController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RankingsController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\VoterController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,9 +35,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/reports/generate', [ReportController::class, 'generatePDF'])->name('reports.generate');
     Route::get('/reports/pdf', [ReportController::class, 'generatePDF'])->name('reports.pdf');
     Route::get('/rankings', [RankingsController::class, 'index'])->name('rankings.index');
-
-    Route::resource('voting-records', VotingRecordController::class)->only(['index', 'show']);
-    
+    Route::get('/feedback&reviews', [FeedbackController::class, 'index'])->name('feedback.index');
     Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
     Route::post('/maintenance/toggle', [MaintenanceController::class, 'toggle'])->name('maintenance.toggle');
     Route::post('/maintenance/message', [MaintenanceController::class, 'updateMessage'])->name('maintenance.message');
@@ -52,4 +50,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
